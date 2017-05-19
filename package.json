@@ -1,5 +1,5 @@
 {
-  "name": "IshikoTestFramework",
+  "name": "ishiko-test-framework",
   "version": "1.0.0",
   "description": "A test framework for JavaScript",
   "main": "TestHarness.js",
