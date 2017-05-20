@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ishiko-js/TestFramework.git"
+    "url": "git+https://github.com/ishiko-js/test-framework.git"
   },
   "author": "Xavier Leclercq <xavier.leclercq@needfulsoftware.com> (https://www.needfulsoftware.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Ishiko-js/TestFramework/issues"
+    "url": "https://github.com/ishiko-js/test-framework/issues"
   },
-  "homepage": "https://github.com/Ishiko-js/TestFramework#readme",
+  "homepage": "https://github.com/ishiko-js/test-framework#readme",
   "dependencies": {
   }
 }
