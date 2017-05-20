@@ -1,8 +1,8 @@
 {
   "name": "ishiko-test-framework",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A test framework for JavaScript",
-  "main": "TestHarness.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "node test/core/index.js"
   },
