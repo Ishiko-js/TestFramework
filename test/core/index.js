@@ -1,8 +1,10 @@
 'use strict'
 
 var tf = require("../../lib/index.js")
+var AddTestTests = require("./TestTests.js")
 
-let tests = new tf.TestHarness()
-let testSequence = tests.appendTestSequence("ishiko-js/test-framework/core tests")
-testSequence.append(new tf.Test("Test1"))
-tests.run()
+let theTestHarness = new tf.TestHarness("ishiko-js/test-framework/core")
+
+AddTestTests(theTestHarness);
+
+theTestHarness.run()
