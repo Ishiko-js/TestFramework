@@ -16,8 +16,8 @@ function FunctionBasedTestCreationTest1()
         "FunctionBasedTestCreationTest1", 
         function() {
             return tf.TestResultOutcome.ePassed
-        });
-    return tf.TestResultOutcome.ePassed;
+        })
+    return tf.TestResultOutcome.ePassed
 }
 
 function FunctionBasedTestRunSuccessTest1()
@@ -26,14 +26,14 @@ function FunctionBasedTestRunSuccessTest1()
         "FunctionBasedTestRunSuccessTest1", 
         function() {
             return tf.TestResultOutcome.ePassed
-        });
+        })
 
     test.run()
 
     if (test.result.outcome == tf.TestResultOutcome.ePassed) {
         return tf.TestResultOutcome.ePassed
     } else {
-        return tf.TestResultOutcome.eFailed;
+        return tf.TestResultOutcome.eFailed
     }
 }
 
@@ -50,6 +50,6 @@ function FunctionBasedTestRunFailureTest1()
     if (test.result.outcome == tf.TestResultOutcome.eFailed) {
         return tf.TestResultOutcome.ePassed
     } else {
-        return tf.TestResultOutcome.eFailed;
+        return tf.TestResultOutcome.eFailed
     }
 }
