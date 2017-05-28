@@ -4,6 +4,7 @@
   "description": "A test framework for JavaScript",
   "main": "lib/index.js",
   "scripts": {
+    "build": "webpack",
     "test": "node test/core/index.js"
   },
   "repository": {
@@ -16,6 +17,8 @@
     "url": "https://github.com/ishiko-js/test-framework/issues"
   },
   "homepage": "https://github.com/ishiko-js/test-framework#readme",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "^2.6.1"
   }
 }
