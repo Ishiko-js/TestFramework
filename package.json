@@ -1,8 +1,8 @@
 {
   "name": "ishiko-test-framework",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A test framework for JavaScript",
-  "main": "lib/index.js",
+  "main": "dist/ishiko-test-framework.js",
   "scripts": {
     "build": "webpack",
     "builddoc": "jsdoc -r src",
