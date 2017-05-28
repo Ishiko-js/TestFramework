@@ -2,7 +2,7 @@
 
 // If you installed the module with npm you would include
 // "ishiko-test-framework"
-var tf = require("../../lib/index.js")
+var tf = require("../../dist/ishiko-test-framework.js")
 
 // Create the test harness
 let theTestHarness = new tf.TestHarness("My First Test Suite")
