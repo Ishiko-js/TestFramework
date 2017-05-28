@@ -1,4 +1,4 @@
-# ishiko-js test-framework
+# ishiko-test-framework
 
 This project is a test framework for JavaScript.
 
