@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "webpack",
+    "builddoc": "jsdoc -r src",
     "test": "node test/core/index.js"
   },
   "repository": {
