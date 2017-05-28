@@ -5,7 +5,7 @@
   @readonly
   @enum {number}
 */
-var TestResultOutcome = {
+export var TestResultOutcome = {
     /**
       The result of the test is unknown.
       This is used as the initial value before
@@ -17,5 +17,3 @@ var TestResultOutcome = {
     /** The test failed. */
     eFailed: 3
 }
-
-module.exports = TestResultOutcome

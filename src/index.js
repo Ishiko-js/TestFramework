@@ -1,19 +1,17 @@
 'use strict'
 
-var TestHarness = require('./core/TestHarness.js')
-var Test = require('./core/Test.js')
-var TestResultOutcome = require('./core/TestResultOutcome.js')
-var TestSequence = require('./core/TestSequence.js')
-var FunctionBasedTest = require('./core/FunctionBasedTest.js')
-var FileComparisonTest = require('./core/FileComparisonTest.js')
+import { TestHarness } from  "./core/TestHarness.js"
+import { Test } from  "./core/Test.js"
+import { TestResultOutcome } from  "./core/TestResultOutcome.js"
+import { TestSequence } from  "./core/TestSequence.js"
+import { FunctionBasedTest } from  "./core/FunctionBasedTest.js"
+import { FileComparisonTest } from  "./core/FileComparisonTest.js"
 
-module.exports = {
-
-    TestHarness: TestHarness,
-    Test: Test,
-    TestResultOutcome: TestResultOutcome,
-    TestSequence: TestSequence,
-    FunctionBasedTest: FunctionBasedTest,
-    FileComparisonTest: FileComparisonTest
-
+export {
+    TestHarness,
+    Test,
+    TestResultOutcome,
+    TestSequence,
+    FunctionBasedTest,
+    FileComparisonTest
 }

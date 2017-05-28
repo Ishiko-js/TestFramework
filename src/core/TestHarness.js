@@ -1,9 +1,9 @@
 'use strict'
 
-var TestProgressObserver = require('./TestProgressObserver.js')
-var TestSequence = require('./TestSequence.js')
-var TestEnvironment = require('./TestEnvironment.js')
-var TopTestSequence = require('./TopTestSequence.js')
+import { TestProgressObserver } from "./TestProgressObserver.js"
+import { TestSequence } from "./TestSequence.js"
+import { TestEnvironment } from "./TestEnvironment.js"
+import { TopTestSequence } from "./TopTestSequence.js"
 
 let topSequence = Symbol()
 
@@ -51,7 +51,7 @@ new tf.FunctionBasedTest(
 theTestHarness.run()
 
 */
-class TestHarness {
+export class TestHarness {
 
     /** 
       Creates a new TestHarness instance.
@@ -87,5 +87,3 @@ class TestHarness {
     }
 
 }
-
-module.exports = TestHarness

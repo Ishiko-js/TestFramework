@@ -1,9 +1,9 @@
 'use strict'
 
-var TestInformation = require('./TestInformation.js')
-var TestResult = require('./TestResult.js')
-var TestResultOutcome = require('./TestResultOutcome.js')
-var ObserverEventType = require('./ObserverEventType.js')
+import { TestInformation } from "./TestInformation.js"
+import { TestResult } from "./TestResult.js"
+import { TestResultOutcome } from "./TestResultOutcome.js"
+import { ObserverEventType } from "./ObserverEventType.js"
 
 /**
   <p>The base class for all the classes implementing tests.</p>
@@ -14,7 +14,7 @@ var ObserverEventType = require('./ObserverEventType.js')
    @property {TestInformation} this.information - The description of the test (number, name, etc)
    @property {TestResult} this.result - The result of the test
 */
-class Test {
+export class Test {
 
     /** 
       Creates a new Test instance.
@@ -80,5 +80,3 @@ class Test {
     }
 
 }
-
-module.exports = Test

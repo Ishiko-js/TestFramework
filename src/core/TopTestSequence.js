@@ -1,8 +1,8 @@
 'use strict'
 
-var TestSequence = require('./TestSequence.js')
+import { TestSequence } from "./TestSequence.js"
 
-class TopTestSequence extends TestSequence {
+export class TopTestSequence extends TestSequence {
 
     notify(type, observer) {
         // Do nothing because the top level sequence is a 
@@ -11,5 +11,3 @@ class TopTestSequence extends TestSequence {
     }
 
 }
-
-module.exports = TopTestSequence

@@ -1,6 +1,6 @@
 'use strict'
 
-var Test = require('./Test.js')
+import { Test } from "./Test.js"
 
 /**
   Implements a test where the test logic is
@@ -8,7 +8,7 @@ var Test = require('./Test.js')
   in as argument to the constructor.
   @extends Test
 */
-class FunctionBasedTest extends Test {
+export class FunctionBasedTest extends Test {
 
     constructor(name, runFct, parentSequence) {
         super(name)
@@ -23,5 +23,3 @@ class FunctionBasedTest extends Test {
     }
 
 }
-
-module.exports = FunctionBasedTest

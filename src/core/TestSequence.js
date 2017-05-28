@@ -1,13 +1,13 @@
 'use strict'
 
-var Test = require('./Test.js')
-var TestResultOutcome = require('./TestResultOutcome.js')
+import { Test } from "./Test.js"
+import { TestResultOutcome } from "./TestResultOutcome.js"
 
 /**
   Represents a sequence of tests.
   @extends Test
 */
-class TestSequence extends Test {
+export class TestSequence extends Test {
 
     /** 
       Creates a new TestSequence instance.
@@ -67,5 +67,3 @@ class TestSequence extends Test {
     }
 
 }
-
-module.exports = TestSequence

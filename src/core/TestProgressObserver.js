@@ -1,7 +1,7 @@
 'use strict'
 
-var ObserverEventType = require('./ObserverEventType.js')
-var TestResultOutcome = require('./TestResultOutcome.js')
+import { ObserverEventType } from "./ObserverEventType.js"
+import { TestResultOutcome } from "./TestResultOutcome.js"
 
 var nesting = Symbol()
 
@@ -10,7 +10,7 @@ var nesting = Symbol()
   and prints that information on the console.
   @extends TestObserver
 */
-class TestProgressObserver {
+export class TestProgressObserver {
 
     constructor() {
         this.notify = function(eventType, test) {
@@ -62,5 +62,3 @@ function formatResult(result) {
     }
     return formattedResult
 }
-
-module.exports = TestProgressObserver

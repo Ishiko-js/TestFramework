@@ -1,13 +1,13 @@
 'use strict'
 
-var TestResultOutcome = require('./TestResultOutcome.js')
+import { TestResultOutcome } from "./TestResultOutcome.js"
 
 /** 
   Represents the result of a test.
 
   @property {TestResultOutcome} this.outcome - An enum indicating the outcome of the test
 */
-class TestResult {
+export class TestResult {
 
     /**
       Creates a new TestResult instance. The outcome is
@@ -28,5 +28,3 @@ class TestResult {
     }
 
 }
-
-module.exports = TestResult

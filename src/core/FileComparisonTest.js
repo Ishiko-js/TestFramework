@@ -1,15 +1,15 @@
 'use strict'
 
 var fs = require('fs')
-var Test = require('./Test.js')
-var TestResultOutcome = require('./TestResultOutcome.js')
+import { Test } from "./Test.js"
+import { TestResultOutcome } from "./TestResultOutcome.js"
 
 /**
   Implements a test where a file is generated
   and its contents compared with a reference file.
   @extends Test
 */
-class FileComparisonTest extends Test {
+export class FileComparisonTest extends Test {
 
     /**
       Callback that implements a specific test case.
@@ -66,5 +66,3 @@ class FileComparisonTest extends Test {
     }
 
 }
-
-module.exports = FileComparisonTest

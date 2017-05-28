@@ -1,7 +1,7 @@
 'use strict'
 
 /** Represents the number of a test. */
-class TestNumber {
+export class TestNumber {
 
     constructor() {
         this.number = [ ]
@@ -35,5 +35,3 @@ class TestNumber {
         return this
     }
 }
-
-module.exports = TestNumber

@@ -1,12 +1,12 @@
 'use strict'
 
-var TestNumber = require("./TestNumber.js")
+import { TestNumber } from "./TestNumber.js"
 
 /** 
     Stores the number and name of the
     test.
 */
-class TestInformation {
+export class TestInformation {
 
     constructor(name) {
         this.number = new TestNumber()
@@ -14,5 +14,3 @@ class TestInformation {
     }
 
 }
-
-module.exports = TestInformation
