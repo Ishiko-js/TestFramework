@@ -1,6 +1,6 @@
 'use strict'
 
-var tf = require("../../lib/index.js")
+var tf = require("../../dist/ishiko-test-framework.js")
 var SimpleTestClass1 = require("./SimpleTestClass1.js")
 
 module.exports = function(theTestHarness) {

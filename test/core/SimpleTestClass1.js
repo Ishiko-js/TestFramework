@@ -1,6 +1,6 @@
 'use strict'
 
-var tf = require("../../lib/index.js")
+var tf = require("../../dist/ishiko-test-framework.js")
 
 class SimpleTestClass1 extends tf.Test {
 

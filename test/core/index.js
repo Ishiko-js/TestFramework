@@ -1,6 +1,6 @@
 'use strict'
 
-var tf = require("../../lib/index.js")
+var tf = require("../../dist/ishiko-test-framework.js")
 var AddTestTests = require("./TestTests.js")
 var AddFunctionBasedTestTests = require("./FunctionBasedTestTests.js")
 var AddFileComparisonTestTests = require("./FileComparisonTestTests.js")
