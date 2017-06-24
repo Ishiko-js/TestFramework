@@ -66,18 +66,20 @@ export class TestHarness {
       Executes the tests in the test suite.
     */
     run() {
-        console.log("Test Suite: " + this[topSequence].name())
+        let self = this
+        console.log("Test Suite: " + self[topSequence].name())
         console.log()
 
         let progressObserver = new TestProgressObserver()
-        this[topSequence].run(progressObserver)
-
-        console.log()
-        if (!this[topSequence].passed()) {
-            console.log("Test Suite FAILED!!!")
-        } else {
-            console.log("Test Suite passed")
-        }	
+        let testPromise = Promise.resolve(self[topSequence].run(progressObserver))
+        testPromise.then(function() {
+            console.log()
+            if (!self[topSequence].passed()) {
+                console.log("Test Suite FAILED!!!")
+            } else {
+                console.log("Test Suite passed")
+            }
+        })
     }
 
     appendTestSequence(name) {

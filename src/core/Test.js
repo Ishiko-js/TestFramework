@@ -45,15 +45,22 @@ export class Test {
 
       @param {TestObserver=} observer - An observer that
         will monitor the execution of the test.
+      @returns {Promise} A promise that will indicate when
+        the test is complete.
     */
     run(observer) {
-        this.notify(ObserverEventType.eTestStart, observer)
+        let self = this
+        let testPromise = new Promise(function(resolve, reject) {
+            self.notify(ObserverEventType.eTestStart, observer)
         
-        let outcome = this.doRun(observer)
-
-        this.result.outcome = outcome
-
-        this.notify(ObserverEventType.eTestEnd, observer)
+            let outcomePromise = Promise.resolve(self.doRun(observer))
+            outcomePromise.then(function(outcome) {
+                self.result.outcome = outcome
+                self.notify(ObserverEventType.eTestEnd, observer)
+                resolve()
+            })
+        })
+        return testPromise
     }
 
     /**
@@ -64,8 +71,17 @@ export class Test {
          test classes.The base class implementation always 
          returns TestResultOutcome.eFailed.</p>
 
+      <p>If the test is asynchronous this function should
+         return a Promise with an executor function that
+         passes the outcome of the test to the resolve 
+         function. So even even if the test fails resolve 
+         should be used, not reject. Use reject to indicate
+         the test couldn't be run.</p>
+
       @virtual
-      @returns {TestResultOutcome} The outcome of the test.
+      @returns {TestResultOutcome|Promise} The outcome of the
+        test or a Promise that will provide the outcome of the
+        test.
       @see FunctionBasedTest
       @see FileComparisonTest
     */

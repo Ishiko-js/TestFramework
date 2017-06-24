@@ -20,37 +20,51 @@ export class TestSequence extends Test {
 
     /**
       Executes the test.
-      @returns {TestResultOutcome} The outcome of the test.
+      @returns {Promise} a Promise that will provide the outcome of the
+        test.
     */
     doRun(observer) {
-        let result = TestResultOutcome.eUnknown
+        let self = this
+        let testOutcomePromise = new Promise(function(resolve, reject) {
 
-        for (let i = 0; i < this.tests.length; i++) {
-            let test = this.tests[i]
-
-            test.run(observer)
-
-            let outcome = test.result.outcome
-
-            if (i == 0) {
-                // The first test determines the initial value of the result
-                result = outcome
-            } else if (result == TestResultOutcome.eUnknown) {
-                // If the current sequence outcome is unknown it can only get worse and be set
-                // to exception or failed (if the outcome we are adding is exception or failed)
-                if ((outcome == TestResultOutcome.eFailed) || (outcome == TestResultOutcome.eException)) {
-                    result = outcome;
-                }
-            } else if (result == TestResultOutcome.ePassed) {
-                // If the current sequence outcome is passed it stays at this state only if the
-                // result we are adding is passed, else it will be 'unknown', 
-                // 'passedButMemoryLeaks', 'exception' or 'failed'.
-                // depending on the outcome of the result we are adding.
-                result = outcome;
+            // Start all tests in the sequence
+            let testPromises = [ ];
+            for (let i = 0; i < self.tests.length; i++) {
+                let test = self.tests[i]
+                let testPromise = Promise.resolve(test.run(observer))
+                testPromises.push(testPromise)
             }
-        }
 
-        return result
+            // Wait for all tests to complete and update the
+            // test sequence result
+            Promise.all(testPromises).then(function() {
+                let result = TestResultOutcome.eUnknown
+
+                for (let i = 0; i < self.tests.length; i++) {
+                    let test = self.tests[i]
+                    let outcome = test.result.outcome
+                    if (i == 0) {
+                        // The first test determines the initial value of the result
+                        result = outcome
+                    } else if (result == TestResultOutcome.eUnknown) {
+                        // If the current sequence outcome is unknown it can only get worse and be set
+                        // to exception or failed (if the outcome we are adding is exception or failed)
+                        if ((outcome == TestResultOutcome.eFailed) || (outcome == TestResultOutcome.eException)) {
+                            result = outcome;
+                        }
+                    } else if (result == TestResultOutcome.ePassed) {
+                        // If the current sequence outcome is passed it stays at this state only if the
+                        // result we are adding is passed, else it will be 'unknown', 
+                        // 'passedButMemoryLeaks', 'exception' or 'failed'.
+                        // depending on the outcome of the result we are adding.
+                        result = outcome;
+                    }
+                }
+
+                resolve(result)
+            })
+        })
+        return testOutcomePromise
     }
 
     append(test) {

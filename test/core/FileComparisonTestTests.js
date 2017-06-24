@@ -24,34 +24,40 @@ function FileComparisonTestCreationTest1()
 
 function FileComparisonTestRunSuccessTest1()
 {
-    let test = new tf.FileComparisonTest(
-        "FileComparisonTestRunSuccessTest1", 
-        function(test) {
-            test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
-            test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/hello2.txt");
-            return tf.TestResultOutcome.ePassed
+    let testPromise = new Promise(function(resolve, reject) {
+        let test = new tf.FileComparisonTest(
+            "FileComparisonTestRunSuccessTest1", 
+            function(test) {
+                test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
+                test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/hello2.txt");
+                return tf.TestResultOutcome.ePassed
+            })
+
+        Promise.resolve(test.run()).then(function() {
+            resolve(test.result.outcome)
         })
-
-    test.run()
-
-    return test.result.outcome
+    })
+    return testPromise
 }
 
 function FileComparisonTestRunFailureTest1()
 {
-    let test = new tf.FileComparisonTest(
-        "FileComparisonTestRunFailureTest1", 
-        function(test) {
-            test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
-            test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/nothello.txt");
-            return tf.TestResultOutcome.ePassed
+    let testPromise = new Promise(function(resolve, reject) {
+        let test = new tf.FileComparisonTest(
+            "FileComparisonTestRunFailureTest1", 
+            function(test) {
+                test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
+                test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/nothello.txt");
+                return tf.TestResultOutcome.ePassed
+            })
+
+        Promise.resolve(test.run()).then(function() {
+            if (test.result.outcome == tf.TestResultOutcome.eFailed) {
+                resolve(tf.TestResultOutcome.ePassed)
+            } else {
+                resolve(tf.TestResultOutcome.eFailed)
+            }
         })
-
-    test.run()
-
-    if (test.result.outcome == tf.TestResultOutcome.eFailed) {
-        return tf.TestResultOutcome.ePassed
-    } else {
-        return tf.TestResultOutcome.eFailed
-    }
+    })
+    return testPromise
 }

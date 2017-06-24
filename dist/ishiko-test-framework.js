@@ -159,15 +159,22 @@ class Test {
 
       @param {TestObserver=} observer - An observer that
         will monitor the execution of the test.
+      @returns {Promise} A promise that will indicate when
+        the test is complete.
     */
     run(observer) {
-        this.notify(__WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart, observer)
+        let self = this
+        let testPromise = new Promise(function(resolve, reject) {
+            self.notify(__WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart, observer)
         
-        let outcome = this.doRun(observer)
-
-        this.result.outcome = outcome
-
-        this.notify(__WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
+            let outcomePromise = Promise.resolve(self.doRun(observer))
+            outcomePromise.then(function(outcome) {
+                self.result.outcome = outcome
+                self.notify(__WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
+                resolve()
+            })
+        })
+        return testPromise
     }
 
     /**
@@ -178,8 +185,17 @@ class Test {
          test classes.The base class implementation always 
          returns TestResultOutcome.eFailed.</p>
 
+      <p>If the test is asynchronous this function should
+         return a Promise with an executor function that
+         passes the outcome of the test to the resolve 
+         function. So even even if the test fails resolve 
+         should be used, not reject. Use reject to indicate
+         the test couldn't be run.</p>
+
       @virtual
-      @returns {TestResultOutcome} The outcome of the test.
+      @returns {TestResultOutcome|Promise} The outcome of the
+        test or a Promise that will provide the outcome of the
+        test.
       @see FunctionBasedTest
       @see FileComparisonTest
     */
@@ -227,37 +243,51 @@ class TestSequence extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */
 
     /**
       Executes the test.
-      @returns {TestResultOutcome} The outcome of the test.
+      @returns {Promise} a Promise that will provide the outcome of the
+        test.
     */
     doRun(observer) {
-        let result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown
+        let self = this
+        let testOutcomePromise = new Promise(function(resolve, reject) {
 
-        for (let i = 0; i < this.tests.length; i++) {
-            let test = this.tests[i]
-
-            test.run(observer)
-
-            let outcome = test.result.outcome
-
-            if (i == 0) {
-                // The first test determines the initial value of the result
-                result = outcome
-            } else if (result == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown) {
-                // If the current sequence outcome is unknown it can only get worse and be set
-                // to exception or failed (if the outcome we are adding is exception or failed)
-                if ((outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed) || (outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eException)) {
-                    result = outcome;
-                }
-            } else if (result == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed) {
-                // If the current sequence outcome is passed it stays at this state only if the
-                // result we are adding is passed, else it will be 'unknown', 
-                // 'passedButMemoryLeaks', 'exception' or 'failed'.
-                // depending on the outcome of the result we are adding.
-                result = outcome;
+            // Start all tests in the sequence
+            let testPromises = [ ];
+            for (let i = 0; i < self.tests.length; i++) {
+                let test = self.tests[i]
+                let testPromise = Promise.resolve(test.run(observer))
+                testPromises.push(testPromise)
             }
-        }
 
-        return result
+            // Wait for all tests to complete and update the
+            // test sequence result
+            Promise.all(testPromises).then(function() {
+                let result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown
+
+                for (let i = 0; i < self.tests.length; i++) {
+                    let test = self.tests[i]
+                    let outcome = test.result.outcome
+                    if (i == 0) {
+                        // The first test determines the initial value of the result
+                        result = outcome
+                    } else if (result == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown) {
+                        // If the current sequence outcome is unknown it can only get worse and be set
+                        // to exception or failed (if the outcome we are adding is exception or failed)
+                        if ((outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed) || (outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eException)) {
+                            result = outcome;
+                        }
+                    } else if (result == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed) {
+                        // If the current sequence outcome is passed it stays at this state only if the
+                        // result we are adding is passed, else it will be 'unknown', 
+                        // 'passedButMemoryLeaks', 'exception' or 'failed'.
+                        // depending on the outcome of the result we are adding.
+                        result = outcome;
+                    }
+                }
+
+                resolve(result)
+            })
+        })
+        return testOutcomePromise
     }
 
     append(test) {
@@ -495,18 +525,20 @@ class TestHarness {
       Executes the tests in the test suite.
     */
     run() {
-        console.log("Test Suite: " + this[topSequence].name())
+        let self = this
+        console.log("Test Suite: " + self[topSequence].name())
         console.log()
 
         let progressObserver = new __WEBPACK_IMPORTED_MODULE_0__TestProgressObserver_js__["a" /* TestProgressObserver */]()
-        this[topSequence].run(progressObserver)
-
-        console.log()
-        if (!this[topSequence].passed()) {
-            console.log("Test Suite FAILED!!!")
-        } else {
-            console.log("Test Suite passed")
-        }	
+        let testPromise = Promise.resolve(self[topSequence].run(progressObserver))
+        testPromise.then(function() {
+            console.log()
+            if (!self[topSequence].passed()) {
+                console.log("Test Suite FAILED!!!")
+            } else {
+                console.log("Test Suite passed")
+            }
+        })
     }
 
     appendTestSequence(name) {

@@ -22,34 +22,40 @@ function FunctionBasedTestCreationTest1()
 
 function FunctionBasedTestRunSuccessTest1()
 {
-    let test = new tf.FunctionBasedTest(
-        "FunctionBasedTestRunSuccessTest1", 
-        function() {
-            return tf.TestResultOutcome.ePassed
+    let testPromise = new Promise(function(resolve, reject) {
+        let test = new tf.FunctionBasedTest(
+            "FunctionBasedTestRunSuccessTest1", 
+            function() {
+                return tf.TestResultOutcome.ePassed
+            })
+
+        Promise.resolve(test.run()).then(function() {
+            if (test.result.outcome == tf.TestResultOutcome.ePassed) {
+                resolve(tf.TestResultOutcome.ePassed)
+            } else {
+                resolve(tf.TestResultOutcome.eFailed)
+            }
         })
-
-    test.run()
-
-    if (test.result.outcome == tf.TestResultOutcome.ePassed) {
-        return tf.TestResultOutcome.ePassed
-    } else {
-        return tf.TestResultOutcome.eFailed
-    }
+    })
+    return testPromise
 }
 
 function FunctionBasedTestRunFailureTest1()
 {
-    let test = new tf.FunctionBasedTest(
-        "FunctionBasedTestRunSuccessTest1", 
-        function() {
-            return tf.TestResultOutcome.eFailed
-        });
+    let testPromise = new Promise(function(resolve, reject) {
+        let test = new tf.FunctionBasedTest(
+            "FunctionBasedTestRunSuccessTest1", 
+            function() {
+                return tf.TestResultOutcome.eFailed
+            });
 
-    test.run()
-
-    if (test.result.outcome == tf.TestResultOutcome.eFailed) {
-        return tf.TestResultOutcome.ePassed
-    } else {
-        return tf.TestResultOutcome.eFailed
-    }
+        Promise.resolve(test.run()).then(function() {
+            if (test.result.outcome == tf.TestResultOutcome.eFailed) {
+                resolve(tf.TestResultOutcome.ePassed)
+            } else {
+                resolve(tf.TestResultOutcome.eFailed)
+            }
+        })
+    })
+    return testPromise
 }
