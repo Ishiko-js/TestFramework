@@ -440,7 +440,11 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
     }
 
     doRun(observer) {
-        return this.runFct(observer)
+        let self = this
+        let testPromise = new Promise(function(resolve, reject) {
+            self.runFct(resolve, reject)
+        })
+        return testPromise
     }
 
 }

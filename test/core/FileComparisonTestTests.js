@@ -12,52 +12,46 @@ module.exports = function(theTestHarness) {
     new tf.FunctionBasedTest("run failure test 1", FileComparisonTestRunFailureTest1, testSequence)
 }
 
-function FileComparisonTestCreationTest1()
+function FileComparisonTestCreationTest1(resolve, reject)
 {
     let test = new tf.FileComparisonTest(
         "FileComparisonTestCreationTest1", 
         function() {
             return tf.TestResultOutcome.ePassed
         })
-    return tf.TestResultOutcome.ePassed
+    resolve(tf.TestResultOutcome.ePassed)
 }
 
-function FileComparisonTestRunSuccessTest1()
+function FileComparisonTestRunSuccessTest1(resolve, reject)
 {
-    let testPromise = new Promise(function(resolve, reject) {
-        let test = new tf.FileComparisonTest(
-            "FileComparisonTestRunSuccessTest1", 
-            function(test) {
-                test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
-                test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/hello2.txt");
-                return tf.TestResultOutcome.ePassed
-            })
-
-        Promise.resolve(test.run()).then(function() {
-            resolve(test.result.outcome)
+    let test = new tf.FileComparisonTest(
+        "FileComparisonTestRunSuccessTest1", 
+        function(test) {
+            test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
+            test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/hello2.txt");
+            return tf.TestResultOutcome.ePassed
         })
+
+    Promise.resolve(test.run()).then(function() {
+        resolve(test.result.outcome)
     })
-    return testPromise
 }
 
-function FileComparisonTestRunFailureTest1()
+function FileComparisonTestRunFailureTest1(resolve, reject)
 {
-    let testPromise = new Promise(function(resolve, reject) {
-        let test = new tf.FileComparisonTest(
-            "FileComparisonTestRunFailureTest1", 
-            function(test) {
-                test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
-                test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/nothello.txt");
-                return tf.TestResultOutcome.ePassed
-            })
-
-        Promise.resolve(test.run()).then(function() {
-            if (test.result.outcome == tf.TestResultOutcome.eFailed) {
-                resolve(tf.TestResultOutcome.ePassed)
-            } else {
-                resolve(tf.TestResultOutcome.eFailed)
-            }
+    let test = new tf.FileComparisonTest(
+        "FileComparisonTestRunFailureTest1", 
+        function(test) {
+            test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
+            test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/nothello.txt");
+            return tf.TestResultOutcome.ePassed
         })
+
+    Promise.resolve(test.run()).then(function() {
+        if (test.result.outcome == tf.TestResultOutcome.eFailed) {
+            resolve(tf.TestResultOutcome.ePassed)
+        } else {
+            resolve(tf.TestResultOutcome.eFailed)
+        }
     })
-    return testPromise
 }

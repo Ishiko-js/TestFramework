@@ -19,7 +19,11 @@ export class FunctionBasedTest extends Test {
     }
 
     doRun(observer) {
-        return this.runFct(observer)
+        let self = this
+        let testPromise = new Promise(function(resolve, reject) {
+            self.runFct(resolve, reject)
+        })
+        return testPromise
     }
 
 }

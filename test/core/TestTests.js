@@ -9,9 +9,9 @@ module.exports = function(theTestHarness) {
     new tf.FunctionBasedTest("Creation test 1", TestCreationTest1, testSequence)
 }
 
-function TestCreationTest1()
+function TestCreationTest1(resolve, reject)
 {
-    let testClass = new SimpleTestClass1("SimpleTestClass1");
+    let testClass = new SimpleTestClass1("SimpleTestClass1")
 
-    return tf.TestResultOutcome.ePassed;
+    resolve(tf.TestResultOutcome.ePassed)
 }
