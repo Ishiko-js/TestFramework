@@ -22,7 +22,7 @@ export class Test {
     */
     constructor(name) {
         this.information = new TestInformation(name)
-        this.result = new TestResult
+        this.result = new TestResult()
     }
 
     number() {
@@ -48,12 +48,12 @@ export class Test {
       @returns {Promise} A promise that will indicate when
         the test is complete.
     */
-    run(observer) {
+    run({ configuration = null, observer = null } = { }) {
         let self = this
         let testPromise = new Promise(function(resolve, reject) {
             self.notify(ObserverEventType.eTestStart, observer)
         
-            let outcomePromise = Promise.resolve(self.doRun(observer))
+            let outcomePromise = Promise.resolve(self.doRun(configuration, observer))
             outcomePromise.then(function(outcome) {
                 self.result.outcome = outcome
                 self.notify(ObserverEventType.eTestEnd, observer)
@@ -85,7 +85,7 @@ export class Test {
       @see FunctionBasedTest
       @see FileComparisonTest
     */
-    doRun(observer) {
+    doRun(configuration, observer) {
         return TestResultOutcome.eFailed
     }
 

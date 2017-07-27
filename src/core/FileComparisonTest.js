@@ -42,7 +42,7 @@ export class FileComparisonTest extends Test {
         this.referenceFilePath = path;
     }
 
-    doRun(observer) {
+    doRun(configuration, observer) {
         let result = TestResultOutcome.eFailed
 
         if (this.runFct) {

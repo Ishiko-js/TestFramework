@@ -23,7 +23,7 @@ export class TestSequence extends Test {
       @returns {Promise} a Promise that will provide the outcome of the
         test.
     */
-    doRun(observer) {
+    doRun(configuration, observer) {
         let self = this
         let testOutcomePromise = new Promise(function(resolve, reject) {
 
@@ -31,7 +31,7 @@ export class TestSequence extends Test {
             let testPromises = [ ];
             for (let i = 0; i < self.tests.length; i++) {
                 let test = self.tests[i]
-                let testPromise = Promise.resolve(test.run(observer))
+                let testPromise = Promise.resolve(test.run({ observer: observer }))
                 testPromises.push(testPromise)
             }
 

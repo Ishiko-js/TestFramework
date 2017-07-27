@@ -71,7 +71,7 @@ export class TestHarness {
         console.log()
 
         let progressObserver = new TestProgressObserver()
-        let testPromise = Promise.resolve(self[topSequence].run(progressObserver))
+        let testPromise = Promise.resolve(self[topSequence].run({ observer: progressObserver }))
         testPromise.then(function() {
             console.log()
             if (!self[topSequence].passed()) {

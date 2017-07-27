@@ -136,7 +136,7 @@ class Test {
     */
     constructor(name) {
         this.information = new __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__["a" /* TestInformation */](name)
-        this.result = new __WEBPACK_IMPORTED_MODULE_1__TestResult_js__["a" /* TestResult */]
+        this.result = new __WEBPACK_IMPORTED_MODULE_1__TestResult_js__["a" /* TestResult */]()
     }
 
     number() {
@@ -162,12 +162,12 @@ class Test {
       @returns {Promise} A promise that will indicate when
         the test is complete.
     */
-    run(observer) {
+    run({ configuration = null, observer = null } = { }) {
         let self = this
         let testPromise = new Promise(function(resolve, reject) {
             self.notify(__WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart, observer)
         
-            let outcomePromise = Promise.resolve(self.doRun(observer))
+            let outcomePromise = Promise.resolve(self.doRun(configuration, observer))
             outcomePromise.then(function(outcome) {
                 self.result.outcome = outcome
                 self.notify(__WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
@@ -199,7 +199,7 @@ class Test {
       @see FunctionBasedTest
       @see FileComparisonTest
     */
-    doRun(observer) {
+    doRun(configuration, observer) {
         return __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed
     }
 
@@ -246,7 +246,7 @@ class TestSequence extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */
       @returns {Promise} a Promise that will provide the outcome of the
         test.
     */
-    doRun(observer) {
+    doRun(configuration, observer) {
         let self = this
         let testOutcomePromise = new Promise(function(resolve, reject) {
 
@@ -254,7 +254,7 @@ class TestSequence extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */
             let testPromises = [ ];
             for (let i = 0; i < self.tests.length; i++) {
                 let test = self.tests[i]
-                let testPromise = Promise.resolve(test.run(observer))
+                let testPromise = Promise.resolve(test.run({ observer: observer }))
                 testPromises.push(testPromise)
             }
 
@@ -385,7 +385,7 @@ class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* T
         this.referenceFilePath = path;
     }
 
-    doRun(observer) {
+    doRun(configuration, observer) {
         let result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed
 
         if (this.runFct) {
@@ -439,7 +439,7 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
         }
     }
 
-    doRun(observer) {
+    doRun(configuration, observer) {
         let self = this
         let testPromise = new Promise(function(resolve, reject) {
             self.runFct(resolve, reject)
@@ -534,7 +534,7 @@ class TestHarness {
         console.log()
 
         let progressObserver = new __WEBPACK_IMPORTED_MODULE_0__TestProgressObserver_js__["a" /* TestProgressObserver */]()
-        let testPromise = Promise.resolve(self[topSequence].run(progressObserver))
+        let testPromise = Promise.resolve(self[topSequence].run({ observer: progressObserver }))
         testPromise.then(function() {
             console.log()
             if (!self[topSequence].passed()) {

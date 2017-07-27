@@ -18,7 +18,7 @@ export class FunctionBasedTest extends Test {
         }
     }
 
-    doRun(observer) {
+    doRun(configuration, observer) {
         let self = this
         let testPromise = new Promise(function(resolve, reject) {
             self.runFct(resolve, reject)
