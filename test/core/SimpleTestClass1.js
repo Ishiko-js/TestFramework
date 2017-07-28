@@ -8,6 +8,7 @@ class SimpleTestClass1 extends tf.Test {
         super(name)
     }
 
+    // doRun function not overriden on purpose
 }
 
 module.exports = SimpleTestClass1

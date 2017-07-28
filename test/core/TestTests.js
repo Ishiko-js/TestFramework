@@ -7,6 +7,8 @@ module.exports = function(theTestHarness) {
     let testSequence = theTestHarness.appendTestSequence("Test tests")
     
     new tf.FunctionBasedTest("Creation test 1", TestCreationTest1, testSequence)
+
+    new tf.FunctionBasedTest("run test 1", TestRunTest1, testSequence)
 }
 
 function TestCreationTest1(resolve, reject)
@@ -14,4 +16,19 @@ function TestCreationTest1(resolve, reject)
     let testClass = new SimpleTestClass1("SimpleTestClass1")
 
     resolve(tf.TestResultOutcome.ePassed)
+}
+
+function TestRunTest1(resolve, reject)
+{
+    let testClass = new SimpleTestClass1("SimpleTestClass1")
+
+    testClass.run().then(function() {
+        // By default the base class doRun returns failed and SimpleClass1
+        // doesn't override it
+        if (testClass.result.outcome  == tf.TestResultOutcome.eFailed) {
+            resolve(tf.TestResultOutcome.ePassed)
+        } else {
+            resolve(tf.TestResultOutcome.eFailed)
+        }
+    })
 }
