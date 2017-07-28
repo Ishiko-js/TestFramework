@@ -27,17 +27,25 @@ export class TestSequence extends Test {
         let self = this
         let testOutcomePromise = new Promise(function(resolve, reject) {
 
-            // Start all tests in the sequence
-            let testPromises = [ ];
-            for (let i = 0; i < self.tests.length; i++) {
-                let test = self.tests[i]
-                let testPromise = Promise.resolve(test.run({ observer: observer }))
-                testPromises.push(testPromise)
+            let allTestsCompletePromise = null
+            if (configuration.parallelExecution) {
+                // Start all tests in the sequence
+                let testPromises = [ ];
+                for (let i = 0; i < self.tests.length; i++) {
+                    let test = self.tests[i]
+                    let testPromise = Promise.resolve(test.run({ configuration: configuration, observer: observer }))
+                    testPromises.push(testPromise)
+                }
+                allTestsCompletePromise = Promise.all(testPromises)
+            } else {
+                allTestsCompletePromise = new Promise(function(resolve, reject) {
+                    runNextTest(self.tests, 0, configuration, observer, resolve)
+                })
             }
 
             // Wait for all tests to complete and update the
             // test sequence result
-            Promise.all(testPromises).then(function() {
+            allTestsCompletePromise.then(function() {
                 let result = TestResultOutcome.eUnknown
 
                 for (let i = 0; i < self.tests.length; i++) {
@@ -80,4 +88,16 @@ export class TestSequence extends Test {
         this.tests.push(test)
     }
 
+}
+
+function runNextTest(tests, index, configuration, observer, resolve) {
+    if (index < tests.length) {
+        // Execute all tests sequentially
+        tests[index].run({ configuration: configuration, observer: observer })
+            .then(function() {
+                runNextTest(tests, (index+1), configuration, observer, resolve)
+            })
+    } else {
+        resolve()
+    }
 }

@@ -1,5 +1,6 @@
 'use strict'
 
+import { TestConfiguration } from "./TestConfiguration.js"
 import { TestProgressObserver } from "./TestProgressObserver.js"
 import { TestSequence } from "./TestSequence.js"
 import { TestEnvironment } from "./TestEnvironment.js"
@@ -70,8 +71,9 @@ export class TestHarness {
         console.log("Test Suite: " + self[topSequence].name())
         console.log()
 
+        let configuration = new TestConfiguration(false)
         let progressObserver = new TestProgressObserver()
-        let testPromise = Promise.resolve(self[topSequence].run({ observer: progressObserver }))
+        let testPromise = Promise.resolve(self[topSequence].run({ configuration: configuration, observer: progressObserver }))
         testPromise.then(function() {
             console.log()
             if (!self[topSequence].passed()) {

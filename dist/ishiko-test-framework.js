@@ -7,7 +7,7 @@
 		exports["IshikoTestFramework"] = factory(require("fs"));
 	else
 		root["IshikoTestFramework"] = factory(root["fs"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_14__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_15__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -108,8 +108,8 @@ var TestResultOutcome = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__ = __webpack_require__(3);
 
@@ -250,17 +250,25 @@ class TestSequence extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */
         let self = this
         let testOutcomePromise = new Promise(function(resolve, reject) {
 
-            // Start all tests in the sequence
-            let testPromises = [ ];
-            for (let i = 0; i < self.tests.length; i++) {
-                let test = self.tests[i]
-                let testPromise = Promise.resolve(test.run({ observer: observer }))
-                testPromises.push(testPromise)
+            let allTestsCompletePromise = null
+            if (configuration.parallelExecution) {
+                // Start all tests in the sequence
+                let testPromises = [ ];
+                for (let i = 0; i < self.tests.length; i++) {
+                    let test = self.tests[i]
+                    let testPromise = Promise.resolve(test.run({ configuration: configuration, observer: observer }))
+                    testPromises.push(testPromise)
+                }
+                allTestsCompletePromise = Promise.all(testPromises)
+            } else {
+                allTestsCompletePromise = new Promise(function(resolve, reject) {
+                    runNextTest(self.tests, 0, configuration, observer, resolve)
+                })
             }
 
             // Wait for all tests to complete and update the
             // test sequence result
-            Promise.all(testPromises).then(function() {
+            allTestsCompletePromise.then(function() {
                 let result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown
 
                 for (let i = 0; i < self.tests.length; i++) {
@@ -307,6 +315,18 @@ class TestSequence extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */
 /* harmony export (immutable) */ __webpack_exports__["a"] = TestSequence;
 
 
+function runNextTest(tests, index, configuration, observer, resolve) {
+    if (index < tests.length) {
+        // Execute all tests sequentially
+        tests[index].run({ configuration: configuration, observer: observer })
+            .then(function() {
+                runNextTest(tests, (index+1), configuration, observer, resolve)
+            })
+    } else {
+        resolve()
+    }
+}
+
 
 /***/ }),
 /* 3 */
@@ -343,7 +363,7 @@ var ObserverEventType = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
 
 
-var fs = __webpack_require__(14)
+var fs = __webpack_require__(15)
 
 
 
@@ -457,10 +477,12 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserver_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestSequence_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestEnvironment_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TopTestSequence_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestEnvironment_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopTestSequence_js__ = __webpack_require__(13);
+
 
 
 
@@ -521,8 +543,8 @@ class TestHarness {
       @param {string} name - The title of the test suite.
     */
     constructor(name) {
-        this.environment = new __WEBPACK_IMPORTED_MODULE_2__TestEnvironment_js__["a" /* TestEnvironment */]()
-        this[topSequence] = new __WEBPACK_IMPORTED_MODULE_3__TopTestSequence_js__["a" /* TopTestSequence */](name)
+        this.environment = new __WEBPACK_IMPORTED_MODULE_3__TestEnvironment_js__["a" /* TestEnvironment */]()
+        this[topSequence] = new __WEBPACK_IMPORTED_MODULE_4__TopTestSequence_js__["a" /* TopTestSequence */](name)
     }
 
     /**
@@ -533,8 +555,9 @@ class TestHarness {
         console.log("Test Suite: " + self[topSequence].name())
         console.log()
 
-        let progressObserver = new __WEBPACK_IMPORTED_MODULE_0__TestProgressObserver_js__["a" /* TestProgressObserver */]()
-        let testPromise = Promise.resolve(self[topSequence].run({ observer: progressObserver }))
+        let configuration = new __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__["a" /* TestConfiguration */](false)
+        let progressObserver = new __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__["a" /* TestProgressObserver */]()
+        let testPromise = Promise.resolve(self[topSequence].run({ configuration: configuration, observer: progressObserver }))
         testPromise.then(function() {
             console.log()
             if (!self[topSequence].passed()) {
@@ -546,7 +569,7 @@ class TestHarness {
     }
 
     appendTestSequence(name) {
-        let newTestSequence = new __WEBPACK_IMPORTED_MODULE_1__TestSequence_js__["a" /* TestSequence */](name)
+        let newTestSequence = new __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__["a" /* TestSequence */](name)
         this[topSequence].append(newTestSequence)
         return newTestSequence
     }
@@ -558,6 +581,24 @@ class TestHarness {
 
 /***/ }),
 /* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+class TestConfiguration {
+
+    constructor(parallelExecution = true) {
+        this.parallelExecution = parallelExecution
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = TestConfiguration;
+
+
+
+/***/ }),
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -608,11 +649,11 @@ class TestEnvironment {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__ = __webpack_require__(10);
 
 
 
@@ -634,7 +675,7 @@ class TestInformation {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -680,7 +721,7 @@ class TestNumber {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -755,7 +796,7 @@ function formatResult(result) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -795,7 +836,7 @@ class TestResult {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -818,7 +859,7 @@ class TopTestSequence extends __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__["a"
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -848,10 +889,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_14__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_15__;
 
 /***/ })
 /******/ ]);
