@@ -11,6 +11,10 @@ module.exports = function(theTestHarness) {
 
     new tf.FunctionBasedTest("run test 1", TestRunTest1, testSequence)
     new tf.FunctionBasedTest("run test 2", TestRunTest2, testSequence)
+    new tf.FunctionBasedTest("run test 3", TestRunTest3, testSequence)
+    new tf.FunctionBasedTest("run test 4", TestRunTest4, testSequence)
+    new tf.FunctionBasedTest("run test 5", TestRunTest5, testSequence)
+    new tf.FunctionBasedTest("run test 6", TestRunTest6, testSequence)
 }
 
 function TestCreationTest1(resolve, reject)
@@ -37,10 +41,62 @@ function TestRunTest1(resolve, reject)
 
 function TestRunTest2(resolve, reject)
 {
-    let testClass = new MockTestClass1("TestRunTest2")
+    let testClass = new MockTestClass1("TestRunTest2", "noreturn")
 
     testClass.run().then(function() {
         if (testClass.result.outcome == tf.TestResultOutcome.eExecutionError) {
+            resolve(tf.TestResultOutcome.ePassed)
+        } else {
+            resolve(tf.TestResultOutcome.eFailed)
+        }
+    })
+}
+
+function TestRunTest3(resolve, reject)
+{
+    let testClass = new MockTestClass1("TestRunTest3", "returnfailed")
+
+    testClass.run().then(function() {
+        if (testClass.result.outcome == tf.TestResultOutcome.eFailed) {
+            resolve(tf.TestResultOutcome.ePassed)
+        } else {
+            resolve(tf.TestResultOutcome.eFailed)
+        }
+    })
+}
+
+function TestRunTest4(resolve, reject)
+{
+    let testClass = new MockTestClass1("TestRunTest4", "returnpassed")
+
+    testClass.run().then(function() {
+        if (testClass.result.outcome == tf.TestResultOutcome.ePassed) {
+            resolve(tf.TestResultOutcome.ePassed)
+        } else {
+            resolve(tf.TestResultOutcome.eFailed)
+        }
+    })
+}
+
+function TestRunTest5(resolve, reject)
+{
+    let testClass = new MockTestClass1("TestRunTest5", "returnpromisefailed")
+
+    testClass.run().then(function() {
+        if (testClass.result.outcome == tf.TestResultOutcome.eFailed) {
+            resolve(tf.TestResultOutcome.ePassed)
+        } else {
+            resolve(tf.TestResultOutcome.eFailed)
+        }
+    })
+}
+
+function TestRunTest6(resolve, reject)
+{
+    let testClass = new MockTestClass1("TestRunTest6", "returnpromisepassed")
+
+    testClass.run().then(function() {
+        if (testClass.result.outcome == tf.TestResultOutcome.ePassed) {
             resolve(tf.TestResultOutcome.ePassed)
         } else {
             resolve(tf.TestResultOutcome.eFailed)

@@ -6,12 +6,24 @@ class MockTestClass1 extends tf.Test {
 
     constructor(name, behavior) {
         super(name)
-        this.behaviour = behavior
+        this.behavior = behavior
     }
 
     doRun(configuration, observer) {
         if ((this.behavior == null) || (this.behavior == "noreturn")) {
             // do nothing
+        } else if (this.behavior == "returnfailed") {
+            return tf.TestResultOutcome.eFailed
+        } else if (this.behavior == "returnpassed") {
+            return tf.TestResultOutcome.ePassed
+        } else if (this.behavior == "returnpromisefailed") {
+            return new Promise(function(resolve, reject) {
+                resolve(tf.TestResultOutcome.eFailed)
+            })
+        } else if (this.behavior == "returnpromisepassed") {
+            return new Promise(function(resolve, reject) {
+                resolve(tf.TestResultOutcome.ePassed)
+            })
         }
     }
 
