@@ -2,8 +2,9 @@
 
 export class TestConfiguration {
 
-    constructor(parallelExecution = true) {
+    constructor(parallelExecution = true, timeout = 10000) {
         this.parallelExecution = parallelExecution
+        this.timeout = timeout
     }
 
 }

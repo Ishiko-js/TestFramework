@@ -19,8 +19,12 @@ export var TestResultOutcome = {
     /** 
       The test couldn't be executed correctly. 
       This indicates an error with the way was written
-      rather than a problem with the code that us being
+      rather than a problem with the code that is being
       tested.
     */
-    eExecutionError: 4
+    eExecutionError: 4,
+    /**
+      The test execution timed out.
+    */
+    eExecutionTimeout: 5
 }

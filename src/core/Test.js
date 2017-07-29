@@ -3,6 +3,7 @@
 import { TestInformation } from "./TestInformation.js"
 import { TestResult } from "./TestResult.js"
 import { TestResultOutcome } from "./TestResultOutcome.js"
+import { TestConfiguration } from "./TestConfiguration.js"
 import { ObserverEventType } from "./ObserverEventType.js"
 
 /**
@@ -48,8 +49,9 @@ export class Test {
       @returns {Promise} A promise that will indicate when
         the test is complete.
     */
-    run({ configuration = null, observer = null } = { }) {
+    run({ configuration = new TestConfiguration(), observer = null } = { }) {
         let self = this
+        let timeout = null
         let testPromise = new Promise(function(resolve, reject) {
             self.notify(ObserverEventType.eTestStart, observer)
         
@@ -70,15 +72,32 @@ export class Test {
                         self.result.outcome = TestResultOutcome.eExecutionError
                     }
                     self.notify(ObserverEventType.eTestEnd, observer)
+                    if (timeout) {
+                        clearTimeout(timeout)
+                    }
                     resolve()
                 })
             } else {
                 self.result.outcome = TestResultOutcome.eExecutionError
                 self.notify(ObserverEventType.eTestEnd, observer)
+                if (timeout) {
+                    clearTimeout(timeout)
+                }
                 resolve()
             }
         })
-        return testPromise
+        let timeoutPromise = new Promise(function(resolve, reject) {
+            timeout = setTimeout(function() {
+                if (self.result.outcome == TestResultOutcome.eUnknown) {
+                   self.result.outcome = TestResultOutcome.eExecutionTimeout
+                   self.notify(ObserverEventType.eTestEnd, observer)
+                }
+                resolve()
+            },
+            configuration.timeout)
+        })
+        let testPromiseWithTimeout = Promise.race([ testPromise, timeoutPromise ]) 
+        return testPromiseWithTimeout
     }
 
     /**

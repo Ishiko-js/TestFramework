@@ -57,6 +57,14 @@ function formatResult(result) {
             formattedResult = "FAILED!!!"
             break
 
+        case TestResultOutcome.eExecutionError:
+            formattedResult = "EXECUTION ERROR!!!"
+            break
+
+        case TestResultOutcome.eTimeout:
+            formattedResult = "TIMEOUT!!!"
+            break
+
         default:
             formattedResult = "UNEXPECTED OUTCOME ENUM VALUE"
     }
