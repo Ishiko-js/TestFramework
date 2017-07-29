@@ -99,7 +99,14 @@ var TestResultOutcome = {
     /** The test passed. */
     ePassed: 1,
     /** The test failed. */
-    eFailed: 3
+    eFailed: 3,
+    /** 
+      The test couldn't be executed correctly. 
+      This indicates an error with the way was written
+      rather than a problem with the code that us being
+      tested.
+    */
+    eExecutionError: 4
 }
 
 
@@ -168,11 +175,29 @@ class Test {
             self.notify(__WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart, observer)
         
             let outcomePromise = Promise.resolve(self.doRun(configuration, observer))
-            outcomePromise.then(function(outcome) {
-                self.result.outcome = outcome
+            if (outcomePromise) {
+                outcomePromise.then(function(outcome) {
+                    let keyFound = false
+                    var keys = Object.keys(__WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */])
+                    for (let i = 0; i < keys.length; i++) {
+                        if (__WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */][keys[i]] == outcome) {
+                            keyFound = true
+                            break
+                        }
+                    }
+                    if (keyFound) {
+                        self.result.outcome = outcome
+                    } else {
+                        self.result.outcome = __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError
+                    }
+                    self.notify(__WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
+                    resolve()
+                })
+            } else {
+                self.result.outcome = __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError
                 self.notify(__WEBPACK_IMPORTED_MODULE_3__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
                 resolve()
-            })
+            }
         })
         return testPromise
     }

@@ -54,11 +54,29 @@ export class Test {
             self.notify(ObserverEventType.eTestStart, observer)
         
             let outcomePromise = Promise.resolve(self.doRun(configuration, observer))
-            outcomePromise.then(function(outcome) {
-                self.result.outcome = outcome
+            if (outcomePromise) {
+                outcomePromise.then(function(outcome) {
+                    let keyFound = false
+                    var keys = Object.keys(TestResultOutcome)
+                    for (let i = 0; i < keys.length; i++) {
+                        if (TestResultOutcome[keys[i]] == outcome) {
+                            keyFound = true
+                            break
+                        }
+                    }
+                    if (keyFound) {
+                        self.result.outcome = outcome
+                    } else {
+                        self.result.outcome = TestResultOutcome.eExecutionError
+                    }
+                    self.notify(ObserverEventType.eTestEnd, observer)
+                    resolve()
+                })
+            } else {
+                self.result.outcome = TestResultOutcome.eExecutionError
                 self.notify(ObserverEventType.eTestEnd, observer)
                 resolve()
-            })
+            }
         })
         return testPromise
     }
