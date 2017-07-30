@@ -1,6 +1,6 @@
 {
   "name": "ishiko-test-framework",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "A test framework for JavaScript",
   "main": "dist/ishiko-test-framework.js",
   "scripts": {

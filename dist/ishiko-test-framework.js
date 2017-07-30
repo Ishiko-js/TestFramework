@@ -502,6 +502,8 @@ class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* T
                             resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed)
                         }
                     }
+                } else {
+                    resolve(outcome)
                 }
             })
         })  
