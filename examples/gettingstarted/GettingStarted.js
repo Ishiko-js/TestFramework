@@ -13,11 +13,11 @@ let numberTests = theTestHarness.appendTestSequence("Number tests")
 // Add the first test to the test sequence
 new tf.FunctionBasedTest(
     "Addition",
-    function() {
+    function(resolve) {
         if ((3 + 2) == 5) {
-            return tf.TestResultOutcome.ePassed
+            resolve(tf.TestResultOutcome.ePassed)
         } else {
-            return tf.TestResultOutcome.eFailed
+            resolve(tf.TestResultOutcome.eFailed)
         }
     },
     numberTests)
@@ -25,11 +25,11 @@ new tf.FunctionBasedTest(
 // Add a second test to the test sequence
 new tf.FunctionBasedTest(
     "Subtraction",
-    function() {
+    function(resolve) {
         if ((3 - 2) == 2) {
-            return tf.TestResultOutcome.ePassed
+            resolve(tf.TestResultOutcome.ePassed)
         } else {
-            return tf.TestResultOutcome.eFailed
+            resolve(tf.TestResultOutcome.eFailed)
         }
     },
     numberTests)

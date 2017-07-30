@@ -15,11 +15,11 @@ This project is a test framework for JavaScript.
     // Add the first test to the test sequence
     new tf.FunctionBasedTest(
         "Addition",
-        function() {
+        function(resolve) {
             if ((3 + 2) == 5) {
-                return tf.TestResultOutcome.ePassed
+                resolve(tf.TestResultOutcome.ePassed)
             } else {
-                return tf.TestResultOutcome.eFailed
+                resolve(tf.TestResultOutcome.eFailed)
             }
         },
         numberTests)
@@ -27,11 +27,11 @@ This project is a test framework for JavaScript.
     // Add a second test to the test sequence
     new tf.FunctionBasedTest(
         "Subtraction",
-        function() {
+        function(resolve) {
             if ((3 - 2) == 2) {
-                return tf.TestResultOutcome.ePassed
+                resolve(tf.TestResultOutcome.ePassed)
             } else {
-                return tf.TestResultOutcome.eFailed
+                resolve(tf.TestResultOutcome.eFailed)
             }
         },
         numberTests)
