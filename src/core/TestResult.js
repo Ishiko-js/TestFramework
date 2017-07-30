@@ -7,7 +7,7 @@ import { TestResultOutcome } from "./TestResultOutcome.js"
 
   @property {TestResultOutcome} this.outcome - An enum indicating the outcome of the test
 */
-export class TestResult {
+class TestResult {
 
     /**
       Creates a new TestResult instance. The outcome is
@@ -28,3 +28,5 @@ export class TestResult {
     }
 
 }
+
+export { TestResult }

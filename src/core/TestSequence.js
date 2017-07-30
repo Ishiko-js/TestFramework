@@ -7,7 +7,7 @@ import { TestResultOutcome } from "./TestResultOutcome.js"
   Represents a sequence of tests.
   @extends Test
 */
-export class TestSequence extends Test {
+class TestSequence extends Test {
 
     /** 
       Creates a new TestSequence instance.
@@ -101,3 +101,5 @@ function runNextTest(tests, index, configuration, observer, resolve) {
         resolve()
     }
 }
+
+export { TestSequence }

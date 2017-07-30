@@ -7,7 +7,7 @@
   @readonly
   @enum {number}
 */
-export var ObserverEventType = {
+var ObserverEventType = {
     /** The test has started. */
     eTestStart: 0,
     /**
@@ -16,3 +16,5 @@ export var ObserverEventType = {
     */
     eTestEnd : 1
 }
+
+export {ObserverEventType }

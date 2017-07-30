@@ -5,7 +5,7 @@
   @readonly
   @enum {number}
 */
-export var TestResultOutcome = {
+var TestResultOutcome = {
     /**
       The result of the test is unknown.
       This is used as the initial value before
@@ -28,3 +28,5 @@ export var TestResultOutcome = {
     */
     eExecutionTimeout: 5
 }
+
+export { TestResultOutcome } 

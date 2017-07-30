@@ -15,7 +15,7 @@
      suite doesn't use more than one test data directory.
      See {@link TestEnvironment#setTestDataDirectory}.
 */
-export class TestEnvironment {
+class TestEnvironment {
 
     /** Creates a new TestEnvironment instance. */
     constructor() {
@@ -40,3 +40,5 @@ export class TestEnvironment {
     }
 
 }
+
+export { TestEnvironment }

@@ -9,7 +9,7 @@ import { TestResultOutcome } from "./TestResultOutcome.js"
   and its contents compared with a reference file.
   @extends Test
 */
-export class FileComparisonTest extends Test {
+class FileComparisonTest extends Test {
 
     /**
       Callback that implements a specific test case.
@@ -73,3 +73,5 @@ export class FileComparisonTest extends Test {
     }
 
 }
+
+export { FileComparisonTest }

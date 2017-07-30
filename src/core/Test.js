@@ -15,7 +15,7 @@ import { ObserverEventType } from "./ObserverEventType.js"
    @property {TestInformation} this.information - The description of the test (number, name, etc)
    @property {TestResult} this.result - The result of the test
 */
-export class Test {
+class Test {
 
     /** 
       Creates a new Test instance.
@@ -133,3 +133,5 @@ export class Test {
     }
 
 }
+
+export { Test }
