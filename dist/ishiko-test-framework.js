@@ -113,12 +113,14 @@ var TestResultOutcome = {
     eExecutionTimeout: 5
 }
 
+ 
 
 /***/ }),
 /* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Test; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
@@ -259,7 +261,7 @@ class Test {
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = Test;
+
 
 
 
@@ -287,6 +289,7 @@ class TestConfiguration {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestSequence; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
 
@@ -380,8 +383,6 @@ class TestSequence extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = TestSequence;
-
 
 function runNextTest(tests, index, configuration, observer, resolve) {
     if (index < tests.length) {
@@ -394,6 +395,8 @@ function runNextTest(tests, index, configuration, observer, resolve) {
         resolve()
     }
 }
+
+
 
 
 /***/ }),
@@ -422,11 +425,14 @@ var ObserverEventType = {
 }
 
 
+
+
 /***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FileComparisonTest; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
 
@@ -504,7 +510,7 @@ class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* T
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = FileComparisonTest;
+
 
 
 
@@ -552,6 +558,7 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestHarness; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__ = __webpack_require__(3);
@@ -586,11 +593,11 @@ let numberTests = theTestHarness.appendTestSequence("Number tests")
 // Add the first test to the test sequence
 new tf.FunctionBasedTest(
     "Addition",
-    function() {
+    function(resolve) {
         if ((3 + 2) == 5) {
-            return tf.TestResultOutcome.ePassed
+            resolve(tf.TestResultOutcome.ePassed)
         } else {
-            return tf.TestResultOutcome.eFailed
+            resolve(tf.TestResultOutcome.eFailed)
         }
     },
     numberTests)
@@ -598,11 +605,11 @@ new tf.FunctionBasedTest(
 // Add a second test to the test sequence
 new tf.FunctionBasedTest(
     "Subtraction",
-    function() {
+    function(resolve) {
         if ((3 - 2) == 2) {
-            return tf.TestResultOutcome.ePassed
+            resolve(tf.TestResultOutcome.ePassed)
         } else {
-            return tf.TestResultOutcome.eFailed
+            resolve(tf.TestResultOutcome.eFailed)
         }
     },
     numberTests)
@@ -650,7 +657,7 @@ class TestHarness {
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = TestHarness;
+
 
 
 
@@ -659,6 +666,7 @@ class TestHarness {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestEnvironment; });
 
 
 /**
@@ -701,7 +709,7 @@ class TestEnvironment {
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = TestEnvironment;
+
 
 
 
@@ -865,6 +873,7 @@ function formatResult(result) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestResult; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__ = __webpack_require__(0);
 
 
@@ -896,7 +905,7 @@ class TestResult {
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = TestResult;
+
 
 
 
