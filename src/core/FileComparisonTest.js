@@ -43,26 +43,33 @@ export class FileComparisonTest extends Test {
     }
 
     doRun(configuration, observer) {
-        let result = TestResultOutcome.eFailed
+        let self = this
 
-        if (this.runFct) {
-            result = this.runFct(this);
-        } else {
-            result = TestResultOutcome.ePassed
-        }
-
-        if (result == TestResultOutcome.ePassed) {
-            result = TestResultOutcome.eFailed
-            if (this.outputFilePath && this.referenceFilePath) {
-                let outputContents = fs.readFileSync(this.outputFilePath)
-                let referenceContents = fs.readFileSync(this.referenceFilePath)
-                if (outputContents.equals(referenceContents)) {
-                    result = TestResultOutcome.ePassed
-                }
+        let runFctPromise = new Promise(function(resolve, reject) {
+            if (self.runFct) {
+                self.runFct(resolve, reject, self)
+            } else {
+                resolve(TestResultOutcome.ePassed)
             }
-        }
+        })
 
-        return result;
+        let testPromise = new Promise(function(resolve, reject) {
+            runFctPromise.then(function(outcome) {
+                if (outcome == TestResultOutcome.ePassed) {
+                    if (self.outputFilePath && self.referenceFilePath) {
+                        let outputContents = fs.readFileSync(self.outputFilePath)
+                        let referenceContents = fs.readFileSync(self.referenceFilePath)
+                        if (outputContents.equals(referenceContents)) {
+                            resolve(TestResultOutcome.ePassed)
+                        } else {
+                            resolve(TestResultOutcome.eFailed)
+                        }
+                    }
+                }
+            })
+        })  
+
+        return testPromise;
     }
 
 }

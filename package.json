@@ -1,6 +1,6 @@
 {
   "name": "ishiko-test-framework",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A test framework for JavaScript",
   "main": "dist/ishiko-test-framework.js",
   "scripts": {
@@ -20,6 +20,6 @@
   "homepage": "https://github.com/ishiko-js/test-framework#readme",
   "dependencies": {},
   "devDependencies": {
-    "webpack": "^2.6.1"
+    "webpack": "^2.7.0"
   }
 }

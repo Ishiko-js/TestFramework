@@ -474,26 +474,33 @@ class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* T
     }
 
     doRun(configuration, observer) {
-        let result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed
+        let self = this
 
-        if (this.runFct) {
-            result = this.runFct(this);
-        } else {
-            result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed
-        }
-
-        if (result == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed) {
-            result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed
-            if (this.outputFilePath && this.referenceFilePath) {
-                let outputContents = fs.readFileSync(this.outputFilePath)
-                let referenceContents = fs.readFileSync(this.referenceFilePath)
-                if (outputContents.equals(referenceContents)) {
-                    result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed
-                }
+        let runFctPromise = new Promise(function(resolve, reject) {
+            if (self.runFct) {
+                self.runFct(resolve, reject, self)
+            } else {
+                resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed)
             }
-        }
+        })
 
-        return result;
+        let testPromise = new Promise(function(resolve, reject) {
+            runFctPromise.then(function(outcome) {
+                if (outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed) {
+                    if (self.outputFilePath && self.referenceFilePath) {
+                        let outputContents = fs.readFileSync(self.outputFilePath)
+                        let referenceContents = fs.readFileSync(self.referenceFilePath)
+                        if (outputContents.equals(referenceContents)) {
+                            resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed)
+                        } else {
+                            resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed)
+                        }
+                    }
+                }
+            })
+        })  
+
+        return testPromise;
     }
 
 }

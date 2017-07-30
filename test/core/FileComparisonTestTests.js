@@ -16,8 +16,8 @@ function FileComparisonTestCreationTest1(resolve, reject)
 {
     let test = new tf.FileComparisonTest(
         "FileComparisonTestCreationTest1", 
-        function() {
-            return tf.TestResultOutcome.ePassed
+        function(resolve) {
+            resolve(tf.TestResultOutcome.ePassed)
         })
     resolve(tf.TestResultOutcome.ePassed)
 }
@@ -26,10 +26,10 @@ function FileComparisonTestRunSuccessTest1(resolve, reject)
 {
     let test = new tf.FileComparisonTest(
         "FileComparisonTestRunSuccessTest1", 
-        function(test) {
+        function(resolve, reject, test) {
             test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
             test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/hello2.txt");
-            return tf.TestResultOutcome.ePassed
+            resolve(tf.TestResultOutcome.ePassed)
         })
 
     Promise.resolve(test.run()).then(function() {
@@ -41,10 +41,10 @@ function FileComparisonTestRunFailureTest1(resolve, reject)
 {
     let test = new tf.FileComparisonTest(
         "FileComparisonTestRunFailureTest1", 
-        function(test) {
+        function(resolve, reject, test) {
             test.setOutputFilePath(__dirname + "/data/comparisontestfiles/hello.txt");
             test.setReferenceFilePath(__dirname + "/data/comparisontestfiles/nothello.txt");
-            return tf.TestResultOutcome.ePassed
+            resolve(tf.TestResultOutcome.ePassed)
         })
 
     Promise.resolve(test.run()).then(function() {
