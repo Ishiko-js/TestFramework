@@ -64,6 +64,8 @@ class FileComparisonTest extends Test {
                         } else {
                             resolve(TestResultOutcome.eFailed)
                         }
+                    } else {
+                        resolve(TestResultOutcome.eExecutionError)
                     }
                 } else {
                     resolve(outcome)
