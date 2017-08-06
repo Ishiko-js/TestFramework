@@ -14,6 +14,8 @@ var TestResultOutcome = {
     eUnknown: 0,
     /** The test passed. */
     ePassed: 1,
+    /** The code being tested threw an exception */
+    eException: 2,
     /** The test failed. */
     eFailed: 3,
     /** 

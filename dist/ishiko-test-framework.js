@@ -98,6 +98,8 @@ var TestResultOutcome = {
     eUnknown: 0,
     /** The test passed. */
     ePassed: 1,
+    /** The code being tested threw an exception */
+    eException: 2,
     /** The test failed. */
     eFailed: 3,
     /** 
@@ -183,28 +185,37 @@ class Test {
         let testPromise = new Promise(function(resolve, reject) {
             self.notify(__WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart, observer)
         
-            let outcomePromise = Promise.resolve(self.doRun(configuration, observer))
+            let outcomePromise = Promise.resolve(self.tryDoRun(configuration, observer))
             if (outcomePromise) {
-                outcomePromise.then(function(outcome) {
-                    let keyFound = false
-                    var keys = Object.keys(__WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */])
-                    for (let i = 0; i < keys.length; i++) {
-                        if (__WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */][keys[i]] == outcome) {
-                            keyFound = true
-                            break
+                outcomePromise
+                    .then(function(outcome) {
+                        let keyFound = false
+                        var keys = Object.keys(__WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */])
+                        for (let i = 0; i < keys.length; i++) {
+                            if (__WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */][keys[i]] == outcome) {
+                                keyFound = true
+                                break
+                            }
                         }
-                    }
-                    if (keyFound) {
-                        self.result.outcome = outcome
-                    } else {
-                        self.result.outcome = __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError
-                    }
-                    self.notify(__WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
-                    if (timeout) {
-                        clearTimeout(timeout)
-                    }
-                    resolve()
-                })
+                        if (keyFound) {
+                            self.result.outcome = outcome
+                        } else {
+                            self.result.outcome = __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError
+                        }
+                        self.notify(__WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
+                        if (timeout) {
+                            clearTimeout(timeout)
+                        }
+                        resolve()
+                    })
+                    .catch(function(err) {
+                        self.result.outcome = __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eException
+                        self.notify(__WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
+                        if (timeout) {
+                            clearTimeout(timeout)
+                        }
+                        resolve()
+                    })
             } else {
                 self.result.outcome = __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError
                 self.notify(__WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
@@ -226,6 +237,14 @@ class Test {
         })
         let testPromiseWithTimeout = Promise.race([ testPromise, timeoutPromise ]) 
         return testPromiseWithTimeout
+    }
+
+    tryDoRun(configuration, observer) {
+        try {
+            return this.doRun(configuration, observer)
+        } catch(err) {
+            return Promise.reject(err);
+        }
     }
 
     /**

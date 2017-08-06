@@ -24,6 +24,8 @@ class MockTestClass1 extends tf.Test {
             return new Promise(function(resolve, reject) {
                 resolve(tf.TestResultOutcome.ePassed)
             })
+        } else if (this.behavior == "throwexception") {
+            throw "MockTestClass1Exception"
         }
     }
 

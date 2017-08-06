@@ -67,7 +67,6 @@ function FunctionBasedTestRunTimeoutTest1(resolve, reject)
     // timeout this test itself
     Promise.resolve(test.run({ configuration: new tf.TestConfiguration(false, 1000) }))
         .then(function() {
-            console.log(test.result.outcome)
             if (test.result.outcome == tf.TestResultOutcome.eExecutionTimeout) {
                 resolve(tf.TestResultOutcome.ePassed)
             } else {

@@ -55,28 +55,37 @@ class Test {
         let testPromise = new Promise(function(resolve, reject) {
             self.notify(ObserverEventType.eTestStart, observer)
         
-            let outcomePromise = Promise.resolve(self.doRun(configuration, observer))
+            let outcomePromise = Promise.resolve(self.tryDoRun(configuration, observer))
             if (outcomePromise) {
-                outcomePromise.then(function(outcome) {
-                    let keyFound = false
-                    var keys = Object.keys(TestResultOutcome)
-                    for (let i = 0; i < keys.length; i++) {
-                        if (TestResultOutcome[keys[i]] == outcome) {
-                            keyFound = true
-                            break
+                outcomePromise
+                    .then(function(outcome) {
+                        let keyFound = false
+                        var keys = Object.keys(TestResultOutcome)
+                        for (let i = 0; i < keys.length; i++) {
+                            if (TestResultOutcome[keys[i]] == outcome) {
+                                keyFound = true
+                                break
+                            }
                         }
-                    }
-                    if (keyFound) {
-                        self.result.outcome = outcome
-                    } else {
-                        self.result.outcome = TestResultOutcome.eExecutionError
-                    }
-                    self.notify(ObserverEventType.eTestEnd, observer)
-                    if (timeout) {
-                        clearTimeout(timeout)
-                    }
-                    resolve()
-                })
+                        if (keyFound) {
+                            self.result.outcome = outcome
+                        } else {
+                            self.result.outcome = TestResultOutcome.eExecutionError
+                        }
+                        self.notify(ObserverEventType.eTestEnd, observer)
+                        if (timeout) {
+                            clearTimeout(timeout)
+                        }
+                        resolve()
+                    })
+                    .catch(function(err) {
+                        self.result.outcome = TestResultOutcome.eException
+                        self.notify(ObserverEventType.eTestEnd, observer)
+                        if (timeout) {
+                            clearTimeout(timeout)
+                        }
+                        resolve()
+                    })
             } else {
                 self.result.outcome = TestResultOutcome.eExecutionError
                 self.notify(ObserverEventType.eTestEnd, observer)
@@ -98,6 +107,14 @@ class Test {
         })
         let testPromiseWithTimeout = Promise.race([ testPromise, timeoutPromise ]) 
         return testPromiseWithTimeout
+    }
+
+    tryDoRun(configuration, observer) {
+        try {
+            return this.doRun(configuration, observer)
+        } catch(err) {
+            return Promise.reject(err);
+        }
     }
 
     /**

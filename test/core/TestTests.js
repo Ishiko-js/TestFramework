@@ -15,6 +15,7 @@ module.exports = function(theTestHarness) {
     new tf.FunctionBasedTest("run test 4", TestRunTest4, testSequence)
     new tf.FunctionBasedTest("run test 5", TestRunTest5, testSequence)
     new tf.FunctionBasedTest("run test 6", TestRunTest6, testSequence)
+    new tf.FunctionBasedTest("run test 7", TestRunTest7, testSequence)
 }
 
 function TestCreationTest1(resolve, reject)
@@ -97,6 +98,19 @@ function TestRunTest6(resolve, reject)
 
     testClass.run().then(function() {
         if (testClass.result.outcome == tf.TestResultOutcome.ePassed) {
+            resolve(tf.TestResultOutcome.ePassed)
+        } else {
+            resolve(tf.TestResultOutcome.eFailed)
+        }
+    })
+}
+
+function TestRunTest7(resolve, reject)
+{
+    let testClass = new MockTestClass1("TestRunTest7", "throwexception")
+
+    testClass.run().then(function() {
+        if (testClass.result.outcome == tf.TestResultOutcome.eException) {
             resolve(tf.TestResultOutcome.ePassed)
         } else {
             resolve(tf.TestResultOutcome.eFailed)
