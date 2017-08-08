@@ -1,5 +1,6 @@
 'use strict'
 
+import { TestProgressObserverConfiguration } from  "./core/TestProgressObserverConfiguration.js"
 import { TestOutputConfiguration } from  "./core/TestOutputConfiguration.js"
 import { TestConfiguration } from  "./core/TestConfiguration.js"
 import { TestHarness } from  "./core/TestHarness.js"
@@ -14,6 +15,7 @@ export {
     TestHarness,
     TestConfiguration,
     TestOutputConfiguration,
+    TestProgressObserverConfiguration,
     Test,
     TestResult,
     TestResultOutcome,
