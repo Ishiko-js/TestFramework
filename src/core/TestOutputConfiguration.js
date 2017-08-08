@@ -2,10 +2,15 @@
 
 import { TestProgressObserverConfiguration } from "./TestProgressObserverConfiguration.js"
 
-export class TestOutputConfiguration {
+/**
+  This class represents the configuration for the various possible output mechanisms.
+*/
+class TestOutputConfiguration {
 
     constructor(progressObserverConfiguration = new TestProgressObserverConfiguration()) {
         this.progressObserverConfiguration = progressObserverConfiguration
     }
 
 }
+
+export { TestOutputConfiguration }
