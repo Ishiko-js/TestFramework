@@ -1,6 +1,7 @@
 'use strict'
 
 var tf = require("../../dist/ishiko-test-framework.js")
+var AddTestOutputConfigurationTests = require("./TestOutputConfigurationTests.js")
 var AddTestConfigurationTests = require("./TestConfigurationTests.js")
 var AddTestResultTests = require("./TestResultTests.js")
 var AddTestTests = require("./TestTests.js")
@@ -12,6 +13,7 @@ let theTestHarness = new tf.TestHarness("ishiko-js/test-framework/core")
 
 theTestHarness.environment.setTestDataDirectory("data")
 
+AddTestOutputConfigurationTests(theTestHarness)
 AddTestConfigurationTests(theTestHarness)
 AddTestResultTests(theTestHarness)
 AddTestTests(theTestHarness)

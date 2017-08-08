@@ -1,5 +1,6 @@
 'use strict'
 
+import { TestOutputConfiguration } from  "./core/TestOutputConfiguration.js"
 import { TestConfiguration } from  "./core/TestConfiguration.js"
 import { TestHarness } from  "./core/TestHarness.js"
 import { Test } from  "./core/Test.js"
@@ -12,6 +13,7 @@ import { FileComparisonTest } from  "./core/FileComparisonTest.js"
 export {
     TestHarness,
     TestConfiguration,
+    TestOutputConfiguration,
     Test,
     TestResult,
     TestResultOutcome,
