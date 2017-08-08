@@ -7,7 +7,7 @@
 		exports["IshikoTestFramework"] = factory(require("fs"));
 	else
 		root["IshikoTestFramework"] = factory(root["fs"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_15__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_17__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -123,11 +123,11 @@ var TestResultOutcome = {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Test; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestConfiguration_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__ = __webpack_require__(5);
 
 
 
@@ -210,6 +210,7 @@ class Test {
                     })
                     .catch(function(err) {
                         self.result.outcome = __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eException
+                        self.result.exception = err
                         self.notify(__WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd, observer)
                         if (timeout) {
                             clearTimeout(timeout)
@@ -289,13 +290,17 @@ class Test {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestOutputConfiguration_js__ = __webpack_require__(13);
+
+
 
 
 class TestConfiguration {
 
-    constructor(parallelExecution = true, timeout = 10000) {
+    constructor(parallelExecution = true, timeout = 10000, outputConfiguration = new __WEBPACK_IMPORTED_MODULE_0__TestOutputConfiguration_js__["a" /* TestOutputConfiguration */]()) {
         this.parallelExecution = parallelExecution
         this.timeout = timeout
+        this.outputConfiguration = outputConfiguration
     }
 
 }
@@ -423,6 +428,48 @@ function runNextTest(tests, index, configuration, observer, resolve) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestResult; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__ = __webpack_require__(0);
+
+
+
+
+/** 
+  Represents the result of a test.
+
+  @property {TestResultOutcome} this.outcome - An enum indicating the outcome of the test
+*/
+class TestResult {
+
+    /**
+      Creates a new TestResult instance. The outcome is
+      set to TestResultOutcome.eUnknown.
+    */
+    constructor() {
+        this.outcome = __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown
+        this.exception = null
+    }
+
+    /**
+      Checks whether the test passed.
+
+      @returns True if this.outcome is TestResultOutcome.ePassed,
+        False in all other cases.
+    */
+    passed() {
+        return (this.outcome == __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed)
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ObserverEventType; });
 
 
@@ -447,7 +494,25 @@ var ObserverEventType = {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+class TestProgressObserverConfiguration {
+
+    constructor(enabled = true) {
+        this.enabled = enabled
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = TestProgressObserverConfiguration;
+
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -456,7 +521,7 @@ var ObserverEventType = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
 
 
-var fs = __webpack_require__(15)
+var fs = __webpack_require__(17)
 
 
 
@@ -538,7 +603,7 @@ class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* T
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -577,16 +642,16 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestHarness; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestEnvironment_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopTestSequence_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestEnvironment_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopTestSequence_js__ = __webpack_require__(15);
 
 
 
@@ -661,7 +726,12 @@ class TestHarness {
         console.log()
 
         let configuration = new __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__["a" /* TestConfiguration */](false)
-        let progressObserver = new __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__["a" /* TestProgressObserver */]()
+
+        let progressObserver = null
+        if (configuration.outputConfiguration.progressObserverConfiguration.enabled) {
+            progressObserver = new __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__["a" /* TestProgressObserver */]()
+        }
+
         let testPromise = Promise.resolve(self[topSequence].run({ configuration: configuration, observer: progressObserver }))
         testPromise.then(function() {
             console.log()
@@ -685,7 +755,7 @@ class TestHarness {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -737,11 +807,11 @@ class TestEnvironment {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__ = __webpack_require__(12);
 
 
 
@@ -763,7 +833,7 @@ class TestInformation {
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -809,12 +879,35 @@ class TestNumber {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ObserverEventType_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(6);
+
+
+
+
+class TestOutputConfiguration {
+
+    constructor(progressObserverConfiguration = new __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__["a" /* TestProgressObserverConfiguration */]()) {
+        this.progressObserverConfiguration = progressObserverConfiguration
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = TestOutputConfiguration;
+
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
+
 
 
 
@@ -829,15 +922,15 @@ var nesting = Symbol()
 */
 class TestProgressObserver {
 
-    constructor() {
+    constructor(configuration = new __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__["a" /* TestProgressObserverConfiguration */]()) {
         this.notify = function(eventType, test) {
              switch (eventType) {
-                 case __WEBPACK_IMPORTED_MODULE_0__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart:
+                 case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart:
                      console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() + " started")
                      this[nesting] += "    "
                      break
 
-                 case __WEBPACK_IMPORTED_MODULE_0__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd:
+                 case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd:
                      if (this[nesting].length >= 4) {
                          this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
                      }
@@ -864,76 +957,39 @@ function formatNumber(number) {
 function formatResult(result) {
     let formattedResult = ""
     switch (result.outcome) {
-        case __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown:
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown:
             formattedResult = "UNKNOWN!!!"
             break
 
-        case __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed:
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed:
             formattedResult = "passed"
             break
 
-        case __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed:
+       case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eException:
+            formattedResult = "EXCEPTION THROWN!!!"
+            break
+
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed:
             formattedResult = "FAILED!!!"
             break
 
-        case __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError:
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError:
             formattedResult = "EXECUTION ERROR!!!"
             break
 
-        case __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eTimeout:
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eTimeout:
             formattedResult = "TIMEOUT!!!"
             break
 
         default:
-            formattedResult = "UNEXPECTED OUTCOME ENUM VALUE"
+            formattedResult = "UNEXPECTED OUTCOME ENUM VALUE: " + result.outcome
     }
     return formattedResult
 }
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestResult; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__ = __webpack_require__(0);
-
-
-
-
-/** 
-  Represents the result of a test.
-
-  @property {TestResultOutcome} this.outcome - An enum indicating the outcome of the test
-*/
-class TestResult {
-
-    /**
-      Creates a new TestResult instance. The outcome is
-      set to TestResultOutcome.eUnknown.
-    */
-    constructor() {
-        this.outcome = __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown
-    }
-
-    /**
-      Checks whether the test passed.
-
-      @returns True if this.outcome is TestResultOutcome.ePassed,
-        False in all other cases.
-    */
-    passed() {
-        return (this.outcome == __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed)
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -956,25 +1012,28 @@ class TopTestSequence extends __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__["a"
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_TestConfiguration_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_TestHarness_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_TestHarness_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_Test_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_TestResultOutcome_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_TestSequence_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_FunctionBasedTest_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_FileComparisonTest_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_TestResult_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_TestResultOutcome_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_TestSequence_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_FunctionBasedTest_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_FileComparisonTest_js__ = __webpack_require__(7);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestHarness", function() { return __WEBPACK_IMPORTED_MODULE_1__core_TestHarness_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_0__core_TestConfiguration_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Test", function() { return __WEBPACK_IMPORTED_MODULE_2__core_Test_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestResultOutcome", function() { return __WEBPACK_IMPORTED_MODULE_3__core_TestResultOutcome_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestSequence", function() { return __WEBPACK_IMPORTED_MODULE_4__core_TestSequence_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FunctionBasedTest", function() { return __WEBPACK_IMPORTED_MODULE_5__core_FunctionBasedTest_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FileComparisonTest", function() { return __WEBPACK_IMPORTED_MODULE_6__core_FileComparisonTest_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestResult", function() { return __WEBPACK_IMPORTED_MODULE_3__core_TestResult_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestResultOutcome", function() { return __WEBPACK_IMPORTED_MODULE_4__core_TestResultOutcome_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestSequence", function() { return __WEBPACK_IMPORTED_MODULE_5__core_TestSequence_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FunctionBasedTest", function() { return __WEBPACK_IMPORTED_MODULE_6__core_FunctionBasedTest_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FileComparisonTest", function() { return __WEBPACK_IMPORTED_MODULE_7__core_FileComparisonTest_js__["a"]; });
+
 
 
 
@@ -989,10 +1048,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_15__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_17__;
 
 /***/ })
 /******/ ]);

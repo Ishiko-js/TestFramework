@@ -1,5 +1,6 @@
 'use strict'
 
+import { TestProgressObserverConfiguration } from "./TestProgressObserverConfiguration.js"
 import { ObserverEventType } from "./ObserverEventType.js"
 import { TestResultOutcome } from "./TestResultOutcome.js"
 
@@ -12,7 +13,7 @@ var nesting = Symbol()
 */
 export class TestProgressObserver {
 
-    constructor() {
+    constructor(configuration = new TestProgressObserverConfiguration()) {
         this.notify = function(eventType, test) {
              switch (eventType) {
                  case ObserverEventType.eTestStart:
@@ -53,6 +54,10 @@ function formatResult(result) {
             formattedResult = "passed"
             break
 
+       case TestResultOutcome.eException:
+            formattedResult = "EXCEPTION THROWN!!!"
+            break
+
         case TestResultOutcome.eFailed:
             formattedResult = "FAILED!!!"
             break
@@ -66,7 +71,7 @@ function formatResult(result) {
             break
 
         default:
-            formattedResult = "UNEXPECTED OUTCOME ENUM VALUE"
+            formattedResult = "UNEXPECTED OUTCOME ENUM VALUE: " + result.outcome
     }
     return formattedResult
 }
