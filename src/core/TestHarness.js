@@ -73,15 +73,17 @@ class TestHarness {
         console.log("Test Suite: " + self[topSequence].name())
         console.log()
 
-        let parallelExecution = false
+        let configuration = new TestConfiguration(false)
         if (argv.parallel) {
-            parallelExecution = (argv.parallel == "true")
+            configuration.parallelExecution = (argv.parallel == "true")
         }
-        let configuration = new TestConfiguration(parallelExecution)
+        if (argv.exceptionDetails) {
+            configuration.outputConfiguration.progressObserverConfiguration.exceptionDetails = !(argv.exceptionDetails == "false")
+        }
 
         let progressObserver = null
         if (configuration.outputConfiguration.progressObserverConfiguration.enabled) {
-            progressObserver = new TestProgressObserver()
+            progressObserver = new TestProgressObserver(configuration.outputConfiguration.progressObserverConfiguration)
         }
 
         let testPromise = Promise.resolve(self[topSequence].run({ configuration: configuration, observer: progressObserver }))

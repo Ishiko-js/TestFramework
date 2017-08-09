@@ -14,6 +14,7 @@ var nesting = Symbol()
 export class TestProgressObserver {
 
     constructor(configuration = new TestProgressObserverConfiguration()) {
+        this.configuration = configuration
         this.notify = function(eventType, test) {
              switch (eventType) {
                  case ObserverEventType.eTestStart:
@@ -26,7 +27,7 @@ export class TestProgressObserver {
                          this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
                      }
                      console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
-                         " completed, result is " + formatResult(test.result))
+                         " completed, result is " + formatResult(test.result, this.configuration))
                      break
              }
         }
@@ -43,7 +44,7 @@ function formatNumber(number) {
     return formattedNumber
 }
 
-function formatResult(result) {
+function formatResult(result, configuration) {
     let formattedResult = ""
     switch (result.outcome) {
         case TestResultOutcome.eUnknown:
@@ -56,6 +57,10 @@ function formatResult(result) {
 
        case TestResultOutcome.eException:
             formattedResult = "EXCEPTION THROWN!!!"
+            if (configuration.exceptionDetails) {
+                formattedResult += "\nException details:\n"
+                formattedResult += result.exception
+            }
             break
 
         case TestResultOutcome.eFailed:

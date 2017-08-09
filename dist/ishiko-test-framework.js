@@ -335,11 +335,16 @@ class TestConfiguration {
 
 /**
   This class represents the configuration for the TestProgressObserver class.
+
+  @property {boolean} this.enabled - Whether this observer is enabled or not.
+  @property {boolean} this.exceptionDetails - Whether to print the details of
+    an exception if one is thrown during a test execution.
 */
 class TestProgressObserverConfiguration {
 
-    constructor(enabled = true) {
+    constructor(enabled = true, exceptionDetails = true) {
         this.enabled = enabled
+        this.exceptionDetails = exceptionDetails
     }
 
 }
@@ -773,15 +778,17 @@ class TestHarness {
         console.log("Test Suite: " + self[topSequence].name())
         console.log()
 
-        let parallelExecution = false
+        let configuration = new __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__["a" /* TestConfiguration */](false)
         if (argv.parallel) {
-            parallelExecution = (argv.parallel == "true")
+            configuration.parallelExecution = (argv.parallel == "true")
         }
-        let configuration = new __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__["a" /* TestConfiguration */](parallelExecution)
+        if (argv.exceptionDetails) {
+            configuration.outputConfiguration.progressObserverConfiguration.exceptionDetails = !(argv.exceptionDetails == "false")
+        }
 
         let progressObserver = null
         if (configuration.outputConfiguration.progressObserverConfiguration.enabled) {
-            progressObserver = new __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__["a" /* TestProgressObserver */]()
+            progressObserver = new __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__["a" /* TestProgressObserver */](configuration.outputConfiguration.progressObserverConfiguration)
         }
 
         let testPromise = Promise.resolve(self[topSequence].run({ configuration: configuration, observer: progressObserver }))
@@ -1195,6 +1202,7 @@ var nesting = Symbol()
 class TestProgressObserver {
 
     constructor(configuration = new __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__["a" /* TestProgressObserverConfiguration */]()) {
+        this.configuration = configuration
         this.notify = function(eventType, test) {
              switch (eventType) {
                  case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart:
@@ -1207,7 +1215,7 @@ class TestProgressObserver {
                          this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
                      }
                      console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
-                         " completed, result is " + formatResult(test.result))
+                         " completed, result is " + formatResult(test.result, this.configuration))
                      break
              }
         }
@@ -1226,7 +1234,7 @@ function formatNumber(number) {
     return formattedNumber
 }
 
-function formatResult(result) {
+function formatResult(result, configuration) {
     let formattedResult = ""
     switch (result.outcome) {
         case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown:
@@ -1239,6 +1247,10 @@ function formatResult(result) {
 
        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eException:
             formattedResult = "EXCEPTION THROWN!!!"
+            if (configuration.exceptionDetails) {
+                formattedResult += "\nException details:\n"
+                formattedResult += result.exception
+            }
             break
 
         case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed:
