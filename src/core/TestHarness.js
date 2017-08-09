@@ -6,6 +6,8 @@ import { TestSequence } from "./TestSequence.js"
 import { TestEnvironment } from "./TestEnvironment.js"
 import { TopTestSequence } from "./TopTestSequence.js"
 
+let argv = require("minimist")(process.argv.slice(2));
+
 let topSequence = Symbol()
 
 /** 
@@ -71,11 +73,19 @@ class TestHarness {
         console.log("Test Suite: " + self[topSequence].name())
         console.log()
 
-        let configuration = new TestConfiguration(false)
-        let progressObserver = new TestProgressObserver()
+        let parallelExecution = false
+        if (argv.parallel) {
+            parallelExecution = (argv.parallel == "true")
+        }
+        let configuration = new TestConfiguration(parallelExecution)
+
+        let progressObserver = null
+        if (configuration.outputConfiguration.progressObserverConfiguration.enabled) {
+            progressObserver = new TestProgressObserver()
+        }
+
         let testPromise = Promise.resolve(self[topSequence].run({ configuration: configuration, observer: progressObserver }))
         testPromise.then(function() {
-            console.log()
             if (!self[topSequence].passed()) {
                 console.log("Test Suite FAILED!!!")
             } else {

@@ -18,7 +18,9 @@
     "url": "https://github.com/ishiko-js/test-framework/issues"
   },
   "homepage": "https://github.com/ishiko-js/test-framework#readme",
-  "dependencies": {},
+  "dependencies": {
+    "minimist": "^1.2.0"
+  },
   "devDependencies": {
     "webpack": "^2.7.0"
   }

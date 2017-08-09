@@ -80,6 +80,7 @@ class Test {
                     })
                     .catch(function(err) {
                         self.result.outcome = TestResultOutcome.eException
+                        self.result.exception = err
                         self.notify(ObserverEventType.eTestEnd, observer)
                         if (timeout) {
                             clearTimeout(timeout)

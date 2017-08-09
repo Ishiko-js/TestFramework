@@ -15,6 +15,7 @@ class TestResult {
     */
     constructor() {
         this.outcome = TestResultOutcome.eUnknown
+        this.exception = null
     }
 
     /**
