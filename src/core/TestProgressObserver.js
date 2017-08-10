@@ -59,7 +59,11 @@ function formatResult(result, configuration) {
             formattedResult = "EXCEPTION THROWN!!!"
             if (configuration.exceptionDetails) {
                 formattedResult += "\nException details:\n"
-                formattedResult += result.exception
+                if (result.exception instanceof Error) {
+                    formattedResult += result.exception.stack
+                } else {
+                    formattedResult += result.exception
+                }
             }
             break
 
