@@ -3,6 +3,7 @@
 import { TestProgressObserverConfiguration } from "./TestProgressObserverConfiguration.js"
 import { ObserverEventType } from "./ObserverEventType.js"
 import { TestResultOutcome } from "./TestResultOutcome.js"
+import { TestSequence } from "./TestSequence.js"
 
 var nesting = Symbol()
 
@@ -27,7 +28,7 @@ export class TestProgressObserver {
                          this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
                      }
                      console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
-                         " completed, result is " + formatResult(test.result, this.configuration))
+                         " completed, result is " + formatResult(test.result, this.configuration, test instanceof TestSequence))
                      break
              }
         }
@@ -44,7 +45,7 @@ function formatNumber(number) {
     return formattedNumber
 }
 
-function formatResult(result, configuration) {
+function formatResult(result, configuration, isSequence) {
     let formattedResult = ""
     switch (result.outcome) {
         case TestResultOutcome.eUnknown:
@@ -57,12 +58,17 @@ function formatResult(result, configuration) {
 
        case TestResultOutcome.eException:
             formattedResult = "EXCEPTION THROWN!!!"
-            if (configuration.exceptionDetails) {
-                formattedResult += "\nException details:\n"
-                if (result.exception instanceof Error) {
-                    formattedResult += result.exception.stack
-                } else {
-                    formattedResult += result.exception
+            // If this is a test sequence we do no want to print the
+            // exception details as there wouldn't be any, it's the
+            // individual tests that have that information
+            if (!isSequence) {
+                if (configuration.exceptionDetails) {
+                    formattedResult += "\nException details:\n"
+                    if (result.exception instanceof Error) {
+                        formattedResult += result.exception.stack
+                    } else {
+                        formattedResult += result.exception
+                    }
                 }
             }
             break

@@ -126,7 +126,7 @@ var TestResultOutcome = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestConfiguration_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestConfiguration_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__ = __webpack_require__(7);
 
 
@@ -290,73 +290,6 @@ class Test {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestConfiguration; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestOutputConfiguration_js__ = __webpack_require__(5);
-
-
-
-
-/**
-  This class represents the configuration for a test.
-
-  @property {boolean} this.parallelExecution - Whether tests in a sequence should be executed in parallel.
-  @property {number} this.timeout - The maximum amount of time in milliseconds a single test is allowed to
-    run for before it gets timed out.
-  @property {TestOutputConfiguration} this.outputConfiguration - The configuration for the output.
-*/
-class TestConfiguration {
-
-    /**
-      Creates a new TestConfiguration instance.
-
-      @param {boolean} [parallelExecution=true] - Initial value for this.parallelExecution.
-      @param {number} [timeout=10000] - Initial value for this.timeout.
-      @param {TestOutputConfiguration} [outputConfiguration=new TestOutputConfiguration()] - Initial value
-        for this.outputConfiguration.
-    */
-    constructor(parallelExecution = true, timeout = 10000, outputConfiguration = new __WEBPACK_IMPORTED_MODULE_0__TestOutputConfiguration_js__["a" /* TestOutputConfiguration */]()) {
-        this.parallelExecution = parallelExecution
-        this.timeout = timeout
-        this.outputConfiguration = outputConfiguration
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestProgressObserverConfiguration; });
-
-
-/**
-  This class represents the configuration for the TestProgressObserver class.
-
-  @property {boolean} this.enabled - Whether this observer is enabled or not.
-  @property {boolean} this.exceptionDetails - Whether to print the details of
-    an exception if one is thrown during a test execution.
-*/
-class TestProgressObserverConfiguration {
-
-    constructor(enabled = true, exceptionDetails = true) {
-        this.enabled = enabled
-        this.exceptionDetails = exceptionDetails
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestSequence; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
@@ -468,12 +401,79 @@ function runNextTest(tests, index, configuration, observer, resolve) {
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestConfiguration; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestOutputConfiguration_js__ = __webpack_require__(5);
+
+
+
+
+/**
+  This class represents the configuration for a test.
+
+  @property {boolean} this.parallelExecution - Whether tests in a sequence should be executed in parallel.
+  @property {number} this.timeout - The maximum amount of time in milliseconds a single test is allowed to
+    run for before it gets timed out.
+  @property {TestOutputConfiguration} this.outputConfiguration - The configuration for the output.
+*/
+class TestConfiguration {
+
+    /**
+      Creates a new TestConfiguration instance.
+
+      @param {boolean} [parallelExecution=true] - Initial value for this.parallelExecution.
+      @param {number} [timeout=10000] - Initial value for this.timeout.
+      @param {TestOutputConfiguration} [outputConfiguration=new TestOutputConfiguration()] - Initial value
+        for this.outputConfiguration.
+    */
+    constructor(parallelExecution = true, timeout = 10000, outputConfiguration = new __WEBPACK_IMPORTED_MODULE_0__TestOutputConfiguration_js__["a" /* TestOutputConfiguration */]()) {
+        this.parallelExecution = parallelExecution
+        this.timeout = timeout
+        this.outputConfiguration = outputConfiguration
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestProgressObserverConfiguration; });
+
+
+/**
+  This class represents the configuration for the TestProgressObserver class.
+
+  @property {boolean} this.enabled - Whether this observer is enabled or not.
+  @property {boolean} this.exceptionDetails - Whether to print the details of
+    an exception if one is thrown during a test execution.
+*/
+class TestProgressObserverConfiguration {
+
+    constructor(enabled = true, exceptionDetails = true) {
+        this.enabled = enabled
+        this.exceptionDetails = exceptionDetails
+    }
+
+}
+
+
+
+
+/***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestOutputConfiguration; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(4);
 
 
 
@@ -698,9 +698,9 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestHarness; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestEnvironment_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopTestSequence_js__ = __webpack_require__(16);
 
@@ -1183,9 +1183,11 @@ class TestNumber {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__ = __webpack_require__(2);
+
 
 
 
@@ -1215,7 +1217,7 @@ class TestProgressObserver {
                          this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
                      }
                      console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
-                         " completed, result is " + formatResult(test.result, this.configuration))
+                         " completed, result is " + formatResult(test.result, this.configuration, test instanceof __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__["a" /* TestSequence */]))
                      break
              }
         }
@@ -1234,7 +1236,7 @@ function formatNumber(number) {
     return formattedNumber
 }
 
-function formatResult(result, configuration) {
+function formatResult(result, configuration, isSequence) {
     let formattedResult = ""
     switch (result.outcome) {
         case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown:
@@ -1247,12 +1249,17 @@ function formatResult(result, configuration) {
 
        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eException:
             formattedResult = "EXCEPTION THROWN!!!"
-            if (configuration.exceptionDetails) {
-                formattedResult += "\nException details:\n"
-                if (result.exception instanceof Error) {
-                    formattedResult += result.exception.stack
-                } else {
-                    formattedResult += result.exception
+            // If this is a test sequence we do no want to print the
+            // exception details as there wouldn't be any, it's the
+            // individual tests that have that information
+            if (!isSequence) {
+                if (configuration.exceptionDetails) {
+                    formattedResult += "\nException details:\n"
+                    if (result.exception instanceof Error) {
+                        formattedResult += result.exception.stack
+                    } else {
+                        formattedResult += result.exception
+                    }
                 }
             }
             break
@@ -1281,7 +1288,7 @@ function formatResult(result, configuration) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__ = __webpack_require__(2);
 
 
 
@@ -1305,14 +1312,14 @@ class TopTestSequence extends __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__["a"
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_TestProgressObserverConfiguration_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_TestProgressObserverConfiguration_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_TestOutputConfiguration_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_TestConfiguration_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_TestConfiguration_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_TestHarness_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_Test_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_TestResult_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_TestResultOutcome_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_TestSequence_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_TestSequence_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_FunctionBasedTest_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__core_FileComparisonTest_js__ = __webpack_require__(8);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestHarness", function() { return __WEBPACK_IMPORTED_MODULE_3__core_TestHarness_js__["a"]; });
