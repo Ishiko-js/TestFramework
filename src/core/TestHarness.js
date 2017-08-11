@@ -74,10 +74,28 @@ class TestHarness {
         console.log()
 
         let configuration = new TestConfiguration(false)
-        if (argv.parallel) {
+
+        // We load the configuration from file first so that
+        // any command line arguments override the configuration
+        // from the file
+        if (argv.config != null) {
+            configuration.readFromFile(argv.config)
+        } else {
+            // If no configuration file is explicitly specified
+            // then check if a "testconfig.json" file is present 
+            // and load it
+            try {
+                configuration.readFromFile("testconfig.json")
+            } catch(err) {
+                // Ignore any errors while trying to load default
+                // config
+            }
+        }
+        
+        if (argv.parallel != null) {
             configuration.parallelExecution = (argv.parallel == "true")
         }
-        if (argv.exceptionDetails) {
+        if (argv.exceptionDetails != null) {
             configuration.outputConfiguration.progressObserverConfiguration.exceptionDetails = !(argv.exceptionDetails == "false")
         }
 

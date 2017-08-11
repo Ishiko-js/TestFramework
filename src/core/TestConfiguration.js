@@ -2,6 +2,8 @@
 
 import { TestOutputConfiguration } from "./TestOutputConfiguration.js"
 
+let fs = require("fs")
+
 /**
   This class represents the configuration for a test.
 
@@ -24,6 +26,22 @@ class TestConfiguration {
         this.parallelExecution = parallelExecution
         this.timeout = timeout
         this.outputConfiguration = outputConfiguration
+    }
+
+    /**
+      Reads the configuration from a JSON file.
+
+      @param {string} path - The path of the configuration file.
+    */
+    readFromFile(path) {
+        let file = fs.readFileSync(path, 'utf8')
+        let config = JSON.parse(file)
+        if (config.parallelExecution != null) {
+            this.parallelExecution = config.parallelExecution
+        }
+        if (config.timeout != null) {
+            this.timeout = config.timeout
+        }
     }
 
 }
