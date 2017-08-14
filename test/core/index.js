@@ -9,6 +9,7 @@ var AddTestTests = require("./TestTests.js")
 var AddTestSequenceTests = require("./TestSequenceTests.js")
 var AddFunctionBasedTestTests = require("./FunctionBasedTestTests.js")
 var AddFileComparisonTestTests = require("./FileComparisonTestTests.js")
+var AddTestProgressObserverTests = require("./TestProgressObserverTests")
 
 let theTestHarness = new tf.TestHarness("ishiko-js/test-framework/core")
 
@@ -22,5 +23,6 @@ AddTestTests(theTestHarness)
 AddTestSequenceTests(theTestHarness)
 AddFunctionBasedTestTests(theTestHarness)
 AddFileComparisonTestTests(theTestHarness)
+AddTestProgressObserverTests(theTestHarness)
 
 theTestHarness.run()
