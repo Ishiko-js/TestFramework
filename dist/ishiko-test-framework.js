@@ -7,7 +7,7 @@
 		exports["IshikoTestFramework"] = factory(require("fs"));
 	else
 		root["IshikoTestFramework"] = factory(root["fs"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_8__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_9__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -123,11 +123,11 @@ var TestResultOutcome = {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Test; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestConfiguration_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__ = __webpack_require__(8);
 
 
 
@@ -411,7 +411,7 @@ function runNextTest(tests, index, configuration, observer, resolve) {
 
 
 
-let fs = __webpack_require__(8)
+let fs = __webpack_require__(9)
 
 /**
   This class represents the configuration for a test.
@@ -521,6 +521,111 @@ class TestOutputConfiguration {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__ = __webpack_require__(2);
+
+
+
+
+
+
+
+var nesting = Symbol()
+
+/** 
+  Observes the progress when a test is being executed
+  and prints that information on the console.
+  @extends TestObserver
+*/
+class TestProgressObserver {
+
+    constructor(configuration = new __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__["a" /* TestProgressObserverConfiguration */]()) {
+        this.configuration = configuration
+        this.notify = function(eventType, test) {
+             switch (eventType) {
+                 case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart:
+                     console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() + " started")
+                     this[nesting] += "    "
+                     break
+
+                 case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd:
+                     if (this[nesting].length >= 4) {
+                         this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
+                     }
+                     console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
+                         " completed, result is " + formatResult(test.result, this.configuration, test instanceof __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__["a" /* TestSequence */]))
+                     break
+             }
+        }
+        this[nesting] = ""
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = TestProgressObserver;
+
+
+function formatNumber(number) {
+    let formattedNumber = ""
+    for (let i = 0; i < number.depth(); i++) {
+         formattedNumber += number.part(i) + ".";
+    }
+    return formattedNumber
+}
+
+function formatResult(result, configuration, isSequence) {
+    let formattedResult = ""
+    switch (result.outcome) {
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown:
+            formattedResult = "UNKNOWN!!!"
+            break
+
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed:
+            formattedResult = "passed"
+            break
+
+       case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eException:
+            formattedResult = "EXCEPTION THROWN!!!"
+            // If this is a test sequence we do no want to print the
+            // exception details as there wouldn't be any, it's the
+            // individual tests that have that information
+            if (!isSequence) {
+                if (configuration.exceptionDetails) {
+                    formattedResult += "\nException details:\n"
+                    if (result.exception instanceof Error) {
+                        formattedResult += result.exception.stack
+                    } else {
+                        formattedResult += result.exception
+                    }
+                }
+            }
+            break
+
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed:
+            formattedResult = "FAILED!!!"
+            break
+
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError:
+            formattedResult = "EXECUTION ERROR!!!"
+            break
+
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eTimeout:
+            formattedResult = "TIMEOUT!!!"
+            break
+
+        default:
+            formattedResult = "UNEXPECTED OUTCOME ENUM VALUE: " + result.outcome
+    }
+    return formattedResult
+}
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestResult; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__ = __webpack_require__(0);
 
@@ -559,7 +664,7 @@ class TestResult {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -587,13 +692,13 @@ var ObserverEventType = {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -602,7 +707,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
 
 
-var fs = __webpack_require__(8)
+var fs = __webpack_require__(9)
 
 
 
@@ -684,7 +789,7 @@ class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* T
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -723,15 +828,15 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestHarness; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestEnvironment_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestEnvironment_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopTestSequence_js__ = __webpack_require__(17);
 
 
@@ -741,7 +846,7 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
 
 
 
-let argv = __webpack_require__(12)(process.argv.slice(2));
+let argv = __webpack_require__(13)(process.argv.slice(2));
 
 let topSequence = Symbol()
 
@@ -861,7 +966,7 @@ class TestHarness {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = function (args, opts) {
@@ -1103,7 +1208,7 @@ function isNumber (x) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1155,11 +1260,11 @@ class TestEnvironment {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__ = __webpack_require__(16);
 
 
 
@@ -1181,7 +1286,7 @@ class TestInformation {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1227,111 +1332,6 @@ class TestNumber {
 
 
 /***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__ = __webpack_require__(2);
-
-
-
-
-
-
-
-var nesting = Symbol()
-
-/** 
-  Observes the progress when a test is being executed
-  and prints that information on the console.
-  @extends TestObserver
-*/
-class TestProgressObserver {
-
-    constructor(configuration = new __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__["a" /* TestProgressObserverConfiguration */]()) {
-        this.configuration = configuration
-        this.notify = function(eventType, test) {
-             switch (eventType) {
-                 case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart:
-                     console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() + " started")
-                     this[nesting] += "    "
-                     break
-
-                 case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd:
-                     if (this[nesting].length >= 4) {
-                         this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
-                     }
-                     console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
-                         " completed, result is " + formatResult(test.result, this.configuration, test instanceof __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__["a" /* TestSequence */]))
-                     break
-             }
-        }
-        this[nesting] = ""
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = TestProgressObserver;
-
-
-function formatNumber(number) {
-    let formattedNumber = ""
-    for (let i = 0; i < number.depth(); i++) {
-         formattedNumber += number.part(i) + ".";
-    }
-    return formattedNumber
-}
-
-function formatResult(result, configuration, isSequence) {
-    let formattedResult = ""
-    switch (result.outcome) {
-        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown:
-            formattedResult = "UNKNOWN!!!"
-            break
-
-        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed:
-            formattedResult = "passed"
-            break
-
-       case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eException:
-            formattedResult = "EXCEPTION THROWN!!!"
-            // If this is a test sequence we do no want to print the
-            // exception details as there wouldn't be any, it's the
-            // individual tests that have that information
-            if (!isSequence) {
-                if (configuration.exceptionDetails) {
-                    formattedResult += "\nException details:\n"
-                    if (result.exception instanceof Error) {
-                        formattedResult += result.exception.stack
-                    } else {
-                        formattedResult += result.exception
-                    }
-                }
-            }
-            break
-
-        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed:
-            formattedResult = "FAILED!!!"
-            break
-
-        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError:
-            formattedResult = "EXECUTION ERROR!!!"
-            break
-
-        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eTimeout:
-            formattedResult = "TIMEOUT!!!"
-            break
-
-        default:
-            formattedResult = "UNEXPECTED OUTCOME ENUM VALUE: " + result.outcome
-    }
-    return formattedResult
-}
-
-
-/***/ }),
 /* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1363,13 +1363,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_TestProgressObserverConfiguration_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_TestOutputConfiguration_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_TestConfiguration_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_TestHarness_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_TestHarness_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_Test_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_TestResult_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_TestResult_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_TestResultOutcome_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_TestSequence_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_FunctionBasedTest_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__core_FileComparisonTest_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_FunctionBasedTest_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__core_FileComparisonTest_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__core_TestProgressObserver_js__ = __webpack_require__(6);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestHarness", function() { return __WEBPACK_IMPORTED_MODULE_3__core_TestHarness_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_2__core_TestConfiguration_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestOutputConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_1__core_TestOutputConfiguration_js__["a"]; });
@@ -1380,6 +1381,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestSequence", function() { return __WEBPACK_IMPORTED_MODULE_7__core_TestSequence_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FunctionBasedTest", function() { return __WEBPACK_IMPORTED_MODULE_8__core_FunctionBasedTest_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FileComparisonTest", function() { return __WEBPACK_IMPORTED_MODULE_9__core_FileComparisonTest_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestProgressObserver", function() { return __WEBPACK_IMPORTED_MODULE_10__core_TestProgressObserver_js__["a"]; });
+
 
 
 

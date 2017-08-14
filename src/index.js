@@ -10,6 +10,7 @@ import { TestResultOutcome } from  "./core/TestResultOutcome.js"
 import { TestSequence } from  "./core/TestSequence.js"
 import { FunctionBasedTest } from  "./core/FunctionBasedTest.js"
 import { FileComparisonTest } from  "./core/FileComparisonTest.js"
+import { TestProgressObserver } from  "./core/TestProgressObserver.js"
 
 export {
     TestHarness,
@@ -21,5 +22,6 @@ export {
     TestResultOutcome,
     TestSequence,
     FunctionBasedTest,
-    FileComparisonTest
+    FileComparisonTest,
+    TestProgressObserver
 }
