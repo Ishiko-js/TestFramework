@@ -1,5 +1,6 @@
 'use strict'
 
+import { ObserverEventType } from  "./core/ObserverEventType.js"
 import { TestProgressObserverConfiguration } from  "./core/TestProgressObserverConfiguration.js"
 import { TestOutputConfiguration } from  "./core/TestOutputConfiguration.js"
 import { TestConfiguration } from  "./core/TestConfiguration.js"
@@ -13,6 +14,7 @@ import { FileComparisonTest } from  "./core/FileComparisonTest.js"
 import { TestProgressObserver } from  "./core/TestProgressObserver.js"
 
 export {
+    ObserverEventType,
     TestHarness,
     TestConfiguration,
     TestOutputConfiguration,

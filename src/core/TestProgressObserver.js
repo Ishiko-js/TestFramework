@@ -19,7 +19,9 @@ export class TestProgressObserver {
         this.notify = function(eventType, test) {
              switch (eventType) {
                  case ObserverEventType.eTestStart:
-                     console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() + " started")
+                     if (this.configuration.console) {
+                         console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() + " started")
+                     }
                      this[nesting] += "    "
                      break
 
@@ -27,8 +29,10 @@ export class TestProgressObserver {
                      if (this[nesting].length >= 4) {
                          this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
                      }
-                     console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
-                         " completed, result is " + formatResult(test.result, this.configuration, test instanceof TestSequence))
+                     if (this.configuration.console) {
+                         console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
+                             " completed, result is " + formatResult(test.result, this.configuration, test instanceof TestSequence))
+                     }
                      break
              }
         }
