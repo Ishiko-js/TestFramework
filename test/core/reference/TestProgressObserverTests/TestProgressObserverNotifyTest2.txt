@@ -1,0 +1,2 @@
+ TestProgressObserverNotifyTest2 started
+ TestProgressObserverNotifyTest2 completed, result is FAILED!!!

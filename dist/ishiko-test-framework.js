@@ -580,31 +580,39 @@ class TestProgressObserver {
     constructor(configuration = new __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__["a" /* TestProgressObserverConfiguration */]()) {
         this.configuration = configuration
         if (this.configuration.filepath != null) {
-            this.file = fs.createWriteStream(this.configuration.filepath)
+            this.file = fs.openSync(this.configuration.filepath, "w")
         }
-        this.notify = function(eventType, test) {
-             switch (eventType) {
-                 case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart:
-                     if (this.configuration.console) {
-                         console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() + " started")
-                     }
-                     this[nesting] += "    "
-                     break
-
-                 case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd:
-                     if (this[nesting].length >= 4) {
-                         this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
-                     }
-                     if (this.configuration.console) {
-                         console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
-                             " completed, result is " + formatResult(test.result, this.configuration, test instanceof __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__["a" /* TestSequence */]))
-                     }
-                     break
-             }
-        }
+        
         this[nesting] = ""
     }
 
+    notify(eventType, test) {
+        switch (eventType) {
+            case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestStart:
+                if (this.configuration.console) {
+                    console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() + " started")
+                }
+                if (this.file != null) {
+                    fs.appendFileSync(this.file, this[nesting] + formatNumber(test.number()) + " " + test.name() + " started\n")
+                }
+                this[nesting] += "    "
+                break
+
+            case __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__["a" /* ObserverEventType */].eTestEnd:
+                if (this[nesting].length >= 4) {
+                    this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
+                }
+                if (this.configuration.console) {
+                    console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
+                        " completed, result is " + formatResult(test.result, this.configuration, test instanceof __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__["a" /* TestSequence */]))
+                }
+                if (this.file != null) {
+                    fs.appendFileSync(this.file, this[nesting] + formatNumber(test.number()) + " " + test.name() +
+                        " completed, result is " + formatResult(test.result, this.configuration, test instanceof __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__["a" /* TestSequence */]) + "\n")
+                }
+                break
+        }
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = TestProgressObserver;
 

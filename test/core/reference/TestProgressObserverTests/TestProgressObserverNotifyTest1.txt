@@ -1,0 +1,2 @@
+ TestProgressObserverNotifyTest1 started
+ TestProgressObserverNotifyTest1 completed, result is UNKNOWN!!!

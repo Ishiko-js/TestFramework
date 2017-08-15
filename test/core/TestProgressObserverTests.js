@@ -13,6 +13,7 @@ module.exports = function(theTestHarness) {
     new tf.FunctionBasedTest("Creation test 2", TestProgressObserverCreationTest2, testSequence)
 
     new tf.FileComparisonTest("notify test 1", TestProgressObserverNotifyTest1, testSequence)
+    new tf.FileComparisonTest("notify test 2", TestProgressObserverNotifyTest2, testSequence)
 }
 
 function TestProgressObserverCreationTest1(resolve, reject)
@@ -38,9 +39,28 @@ function TestProgressObserverNotifyTest1(resolve, reject, test)
 
     let simpletest = new SimpleTestClass1("TestProgressObserverNotifyTest1")
     observer.notify(tf.ObserverEventType.eTestStart, simpletest)
+    observer.notify(tf.ObserverEventType.eTestEnd, simpletest)
 
     test.setOutputFilePath(__dirname + "/output/TestProgressObserverTests/TestProgressObserverNotifyTest1.txt");
     test.setReferenceFilePath(__dirname + "/reference/TestProgressObserverTests/TestProgressObserverNotifyTest1.txt");
+
+    resolve(tf.TestResultOutcome.ePassed)
+}
+
+function TestProgressObserverNotifyTest2(resolve, reject, test)
+{
+    let config = new tf.TestProgressObserverConfiguration()
+    config.console = false
+    config.filepath = __dirname + "/output/TestProgressObserverTests/TestProgressObserverNotifyTest2.txt"
+    let observer = new tf.TestProgressObserver(config)
+
+    let simpletest = new SimpleTestClass1("TestProgressObserverNotifyTest2")
+    observer.notify(tf.ObserverEventType.eTestStart, simpletest)
+    simpletest.result.outcome = tf.TestResultOutcome.eFailed
+    observer.notify(tf.ObserverEventType.eTestEnd, simpletest)
+
+    test.setOutputFilePath(__dirname + "/output/TestProgressObserverTests/TestProgressObserverNotifyTest2.txt");
+    test.setReferenceFilePath(__dirname + "/reference/TestProgressObserverTests/TestProgressObserverNotifyTest2.txt");
 
     resolve(tf.TestResultOutcome.ePassed)
 }

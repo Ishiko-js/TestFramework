@@ -19,31 +19,39 @@ export class TestProgressObserver {
     constructor(configuration = new TestProgressObserverConfiguration()) {
         this.configuration = configuration
         if (this.configuration.filepath != null) {
-            this.file = fs.createWriteStream(this.configuration.filepath)
+            this.file = fs.openSync(this.configuration.filepath, "w")
         }
-        this.notify = function(eventType, test) {
-             switch (eventType) {
-                 case ObserverEventType.eTestStart:
-                     if (this.configuration.console) {
-                         console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() + " started")
-                     }
-                     this[nesting] += "    "
-                     break
-
-                 case ObserverEventType.eTestEnd:
-                     if (this[nesting].length >= 4) {
-                         this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
-                     }
-                     if (this.configuration.console) {
-                         console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
-                             " completed, result is " + formatResult(test.result, this.configuration, test instanceof TestSequence))
-                     }
-                     break
-             }
-        }
+        
         this[nesting] = ""
     }
 
+    notify(eventType, test) {
+        switch (eventType) {
+            case ObserverEventType.eTestStart:
+                if (this.configuration.console) {
+                    console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() + " started")
+                }
+                if (this.file != null) {
+                    fs.appendFileSync(this.file, this[nesting] + formatNumber(test.number()) + " " + test.name() + " started\n")
+                }
+                this[nesting] += "    "
+                break
+
+            case ObserverEventType.eTestEnd:
+                if (this[nesting].length >= 4) {
+                    this[nesting] = this[nesting].substring(0, (this[nesting].length - 4))
+                }
+                if (this.configuration.console) {
+                    console.log(this[nesting] + formatNumber(test.number()) + " " + test.name() +
+                        " completed, result is " + formatResult(test.result, this.configuration, test instanceof TestSequence))
+                }
+                if (this.file != null) {
+                    fs.appendFileSync(this.file, this[nesting] + formatNumber(test.number()) + " " + test.name() +
+                        " completed, result is " + formatResult(test.result, this.configuration, test instanceof TestSequence) + "\n")
+                }
+                break
+        }
+    }
 }
 
 function formatNumber(number) {
