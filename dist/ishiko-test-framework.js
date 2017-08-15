@@ -661,7 +661,7 @@ function formatResult(result, configuration, isSequence) {
             formattedResult = "EXECUTION ERROR!!!"
             break
 
-        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eTimeout:
+        case __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionTimeout:
             formattedResult = "TIMEOUT!!!"
             break
 

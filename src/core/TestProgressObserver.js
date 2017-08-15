@@ -98,7 +98,7 @@ function formatResult(result, configuration, isSequence) {
             formattedResult = "EXECUTION ERROR!!!"
             break
 
-        case TestResultOutcome.eTimeout:
+        case TestResultOutcome.eExecutionTimeout:
             formattedResult = "TIMEOUT!!!"
             break
 
