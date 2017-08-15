@@ -5,6 +5,8 @@ import { ObserverEventType } from "./ObserverEventType.js"
 import { TestResultOutcome } from "./TestResultOutcome.js"
 import { TestSequence } from "./TestSequence.js"
 
+var fs = require('fs')
+
 var nesting = Symbol()
 
 /** 
@@ -16,6 +18,9 @@ export class TestProgressObserver {
 
     constructor(configuration = new TestProgressObserverConfiguration()) {
         this.configuration = configuration
+        if (this.configuration.filepath != null) {
+            this.file = fs.createWriteStream(this.configuration.filepath)
+        }
         this.notify = function(eventType, test) {
              switch (eventType) {
                  case ObserverEventType.eTestStart:
