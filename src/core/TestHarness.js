@@ -106,10 +106,15 @@ class TestHarness {
 
         let testPromise = Promise.resolve(self[topSequence].run({ configuration: configuration, observer: progressObserver }))
         testPromise.then(function() {
+            let passRate = self[topSequence].result.getPassRate()
             if (!self[topSequence].passed()) {
-                console.log("Test Suite FAILED!!!")
+                console.log("Test Suite FAILED!!! (" + passRate.passed
+                    + " passed, " + passRate.failed + " failed, "
+                    + passRate.total + " total)")
             } else {
-                console.log("Test Suite passed")
+                console.log("Test Suite passed (" + passRate.passed
+                    + " passed, " + passRate.failed + " failed, "
+                    + passRate.total + " total)")
             }
         })
     }

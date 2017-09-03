@@ -23,7 +23,7 @@ class Test {
     */
     constructor(name) {
         this.information = new TestInformation(name)
-        this.result = new TestResult()
+        this.result = new TestResult(this)
     }
 
     number() {

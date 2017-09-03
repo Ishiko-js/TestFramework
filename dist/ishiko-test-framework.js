@@ -122,6 +122,121 @@ var TestResultOutcome = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestSequence; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
+
+
+
+
+
+/**
+  Represents a sequence of tests.
+  @extends Test
+*/
+class TestSequence extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */] {
+
+    /** 
+      Creates a new TestSequence instance.
+      @param {string} name - The name of the test sequence.
+    */
+    constructor(name) {
+        super(name)
+        this.tests = [ ]
+    }
+
+    /**
+      Executes the test.
+      @returns {Promise} a Promise that will provide the outcome of the
+        test.
+    */
+    doRun(configuration, observer) {
+        let self = this
+        let testOutcomePromise = new Promise(function(resolve, reject) {
+
+            let allTestsCompletePromise = null
+            if (configuration.parallelExecution) {
+                // Start all tests in the sequence
+                let testPromises = [ ];
+                for (let i = 0; i < self.tests.length; i++) {
+                    let test = self.tests[i]
+                    let testPromise = Promise.resolve(test.run({ configuration: configuration, observer: observer }))
+                    testPromises.push(testPromise)
+                }
+                allTestsCompletePromise = Promise.all(testPromises)
+            } else {
+                allTestsCompletePromise = new Promise(function(resolve, reject) {
+                    runNextTest(self.tests, 0, configuration, observer, resolve)
+                })
+            }
+
+            // Wait for all tests to complete and update the
+            // test sequence result
+            allTestsCompletePromise.then(function() {
+                let result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown
+
+                for (let i = 0; i < self.tests.length; i++) {
+                    let test = self.tests[i]
+                    let outcome = test.result.outcome
+                    if (i == 0) {
+                        // The first test determines the initial value of the result
+                        result = outcome
+                    } else if (result == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown) {
+                        // If the current sequence outcome is unknown it can only get worse and be set
+                        // to exception or failed (if the outcome we are adding is exception or failed)
+                        if ((outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed) || (outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eException)) {
+                            result = outcome;
+                        }
+                    } else if (result == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed) {
+                        // If the current sequence outcome is passed it stays at this state only if the
+                        // result we are adding is passed, else it will be 'unknown', 
+                        // 'passedButMemoryLeaks', 'exception' or 'failed'.
+                        // depending on the outcome of the result we are adding.
+                        result = outcome;
+                    }
+                }
+
+                resolve(result)
+            })
+        })
+        return testOutcomePromise
+    }
+
+    append(test) {
+        // We need to update the number of the test
+        if (this.tests.length == 0) {
+            let newNumber = this.number().clone();
+            test.information.number = newNumber.deeperNumber()
+        } else {
+            let newNumber = this.tests[this.tests.length - 1].number().clone();
+            test.information.number = newNumber.increase()
+	}
+
+        this.tests.push(test)
+    }
+
+}
+
+function runNextTest(tests, index, configuration, observer, resolve) {
+    if (index < tests.length) {
+        // Execute all tests sequentially
+        tests[index].run({ configuration: configuration, observer: observer })
+            .then(function() {
+                runNextTest(tests, (index+1), configuration, observer, resolve)
+            })
+    } else {
+        resolve()
+    }
+}
+
+
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Test; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(9);
@@ -153,7 +268,7 @@ class Test {
     */
     constructor(name) {
         this.information = new __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__["a" /* TestInformation */](name)
-        this.result = new __WEBPACK_IMPORTED_MODULE_1__TestResult_js__["a" /* TestResult */]()
+        this.result = new __WEBPACK_IMPORTED_MODULE_1__TestResult_js__["a" /* TestResult */](this)
     }
 
     number() {
@@ -280,121 +395,6 @@ class Test {
         }
     }
 
-}
-
-
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestSequence; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
-
-
-
-
-
-/**
-  Represents a sequence of tests.
-  @extends Test
-*/
-class TestSequence extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */] {
-
-    /** 
-      Creates a new TestSequence instance.
-      @param {string} name - The name of the test sequence.
-    */
-    constructor(name) {
-        super(name)
-        this.tests = [ ]
-    }
-
-    /**
-      Executes the test.
-      @returns {Promise} a Promise that will provide the outcome of the
-        test.
-    */
-    doRun(configuration, observer) {
-        let self = this
-        let testOutcomePromise = new Promise(function(resolve, reject) {
-
-            let allTestsCompletePromise = null
-            if (configuration.parallelExecution) {
-                // Start all tests in the sequence
-                let testPromises = [ ];
-                for (let i = 0; i < self.tests.length; i++) {
-                    let test = self.tests[i]
-                    let testPromise = Promise.resolve(test.run({ configuration: configuration, observer: observer }))
-                    testPromises.push(testPromise)
-                }
-                allTestsCompletePromise = Promise.all(testPromises)
-            } else {
-                allTestsCompletePromise = new Promise(function(resolve, reject) {
-                    runNextTest(self.tests, 0, configuration, observer, resolve)
-                })
-            }
-
-            // Wait for all tests to complete and update the
-            // test sequence result
-            allTestsCompletePromise.then(function() {
-                let result = __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown
-
-                for (let i = 0; i < self.tests.length; i++) {
-                    let test = self.tests[i]
-                    let outcome = test.result.outcome
-                    if (i == 0) {
-                        // The first test determines the initial value of the result
-                        result = outcome
-                    } else if (result == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown) {
-                        // If the current sequence outcome is unknown it can only get worse and be set
-                        // to exception or failed (if the outcome we are adding is exception or failed)
-                        if ((outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed) || (outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eException)) {
-                            result = outcome;
-                        }
-                    } else if (result == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed) {
-                        // If the current sequence outcome is passed it stays at this state only if the
-                        // result we are adding is passed, else it will be 'unknown', 
-                        // 'passedButMemoryLeaks', 'exception' or 'failed'.
-                        // depending on the outcome of the result we are adding.
-                        result = outcome;
-                    }
-                }
-
-                resolve(result)
-            })
-        })
-        return testOutcomePromise
-    }
-
-    append(test) {
-        // We need to update the number of the test
-        if (this.tests.length == 0) {
-            let newNumber = this.number().clone();
-            test.information.number = newNumber.deeperNumber()
-        } else {
-            let newNumber = this.tests[this.tests.length - 1].number().clone();
-            test.information.number = newNumber.increase()
-	}
-
-        this.tests.push(test)
-    }
-
-}
-
-function runNextTest(tests, index, configuration, observer, resolve) {
-    if (index < tests.length) {
-        // Execute all tests sequentially
-        tests[index].run({ configuration: configuration, observer: observer })
-            .then(function() {
-                runNextTest(tests, (index+1), configuration, observer, resolve)
-            })
-    } else {
-        resolve()
-    }
 }
 
 
@@ -558,7 +558,7 @@ class TestOutputConfiguration {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__ = __webpack_require__(1);
 
 
 
@@ -679,6 +679,8 @@ function formatResult(result, configuration, isSequence) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestResult; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestSequence_js__ = __webpack_require__(1);
+
 
 
 
@@ -694,7 +696,8 @@ class TestResult {
       Creates a new TestResult instance. The outcome is
       set to TestResultOutcome.eUnknown.
     */
-    constructor() {
+    constructor(test) {
+        this.test = test
         this.outcome = __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__["a" /* TestResultOutcome */].eUnknown
         this.exception = null
     }
@@ -709,6 +712,31 @@ class TestResult {
         return (this.outcome == __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed)
     }
 
+    getPassRate() {
+        let passed = 0
+        let failed = 0
+        let total = 0
+        if (this.test instanceof __WEBPACK_IMPORTED_MODULE_1__TestSequence_js__["a" /* TestSequence */]) {
+            for (let test of this.test.tests) {
+                let localPassRate = test.result.getPassRate()
+                passed += localPassRate.passed
+                failed += localPassRate.failed
+                total += localPassRate.total
+            }
+        } else {
+            switch (this.outcome) {
+                case __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed:
+                    passed = 1
+                    break
+
+                case __WEBPACK_IMPORTED_MODULE_0__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed:
+                    failed = 1
+                    break
+            }
+            total = 1
+        }
+        return { "passed": passed, "failed": failed, "total": total }
+    }
 }
 
 
@@ -720,7 +748,7 @@ class TestResult {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FileComparisonTest; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
 
 
@@ -810,7 +838,7 @@ class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* T
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(2);
 
 
 
@@ -852,7 +880,7 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestHarness; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestEnvironment_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopTestSequence_js__ = __webpack_require__(17);
 
@@ -963,10 +991,15 @@ class TestHarness {
 
         let testPromise = Promise.resolve(self[topSequence].run({ configuration: configuration, observer: progressObserver }))
         testPromise.then(function() {
+            let passRate = self[topSequence].result.getPassRate()
             if (!self[topSequence].passed()) {
-                console.log("Test Suite FAILED!!!")
+                console.log("Test Suite FAILED!!! (" + passRate.passed
+                    + " passed, " + passRate.failed + " failed, "
+                    + passRate.total + " total)")
             } else {
-                console.log("Test Suite passed")
+                console.log("Test Suite passed (" + passRate.passed
+                    + " passed, " + passRate.failed + " failed, "
+                    + passRate.total + " total)")
             }
         })
     }
@@ -1353,7 +1386,7 @@ class TestNumber {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__ = __webpack_require__(1);
 
 
 
@@ -1382,10 +1415,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_TestOutputConfiguration_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_TestConfiguration_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_TestHarness_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_Test_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_Test_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_TestResult_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_TestResultOutcome_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_TestSequence_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_TestSequence_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__core_FunctionBasedTest_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__core_FileComparisonTest_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__core_TestProgressObserver_js__ = __webpack_require__(8);
