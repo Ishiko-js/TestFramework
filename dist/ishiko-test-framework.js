@@ -43,9 +43,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -73,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -238,10 +235,10 @@ function runNextTest(tests, index, configuration, observer, resolve) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Test; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestInformation_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResult_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestConfiguration_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestConfiguration_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ObserverEventType_js__ = __webpack_require__(3);
 
 
@@ -433,6 +430,39 @@ var ObserverEventType = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestProgressObserverConfiguration; });
+
+
+/**
+  This class represents the configuration for the TestProgressObserver class.
+
+  @property {boolean} this.enabled - Whether this observer is enabled or not.
+  @property {boolean} this.exceptionDetails - Whether to print the details of
+    an exception if one is thrown during a test execution.
+  @property {boolean} this.console - Whether the output needs to be printed to
+    the console.
+  @property {string} this.filepath - If this is not null it's the path to a file
+    where the output will be written.
+*/
+class TestProgressObserverConfiguration {
+
+    constructor(enabled = true, exceptionDetails = true) {
+        this.enabled = enabled
+        this.exceptionDetails = exceptionDetails
+        this.console = true
+        this.filepath = null
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestConfiguration; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestOutputConfiguration_js__ = __webpack_require__(7);
 
@@ -487,39 +517,6 @@ class TestConfiguration {
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestProgressObserverConfiguration; });
-
-
-/**
-  This class represents the configuration for the TestProgressObserver class.
-
-  @property {boolean} this.enabled - Whether this observer is enabled or not.
-  @property {boolean} this.exceptionDetails - Whether to print the details of
-    an exception if one is thrown during a test execution.
-  @property {boolean} this.console - Whether the output needs to be printed to
-    the console.
-  @property {string} this.filepath - If this is not null it's the path to a file
-    where the output will be written.
-*/
-class TestProgressObserverConfiguration {
-
-    constructor(enabled = true, exceptionDetails = true) {
-        this.enabled = enabled
-        this.exceptionDetails = exceptionDetails
-        this.console = true
-        this.filepath = null
-    }
-
-}
-
-
-
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
@@ -531,7 +528,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestOutputConfiguration; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(4);
 
 
 
@@ -555,7 +552,7 @@ class TestOutputConfiguration {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestProgressObserverConfiguration_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ObserverEventType_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestResultOutcome_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestSequence_js__ = __webpack_require__(1);
@@ -747,88 +744,45 @@ class TestResult {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FileComparisonTest; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_ObserverEventType_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_TestProgressObserverConfiguration_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_TestOutputConfiguration_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_TestConfiguration_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_TestHarness_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_Test_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_TestResult_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_TestResultOutcome_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_TestSequence_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__core_FunctionBasedTest_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__core_FileComparisonTest_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__core_TestProgressObserver_js__ = __webpack_require__(8);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ObserverEventType", function() { return __WEBPACK_IMPORTED_MODULE_0__core_ObserverEventType_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestHarness", function() { return __WEBPACK_IMPORTED_MODULE_4__core_TestHarness_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_3__core_TestConfiguration_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestOutputConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_2__core_TestOutputConfiguration_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestProgressObserverConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_1__core_TestProgressObserverConfiguration_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Test", function() { return __WEBPACK_IMPORTED_MODULE_5__core_Test_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestResult", function() { return __WEBPACK_IMPORTED_MODULE_6__core_TestResult_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestResultOutcome", function() { return __WEBPACK_IMPORTED_MODULE_7__core_TestResultOutcome_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestSequence", function() { return __WEBPACK_IMPORTED_MODULE_8__core_TestSequence_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FunctionBasedTest", function() { return __WEBPACK_IMPORTED_MODULE_9__core_FunctionBasedTest_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FileComparisonTest", function() { return __WEBPACK_IMPORTED_MODULE_10__core_FileComparisonTest_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestProgressObserver", function() { return __WEBPACK_IMPORTED_MODULE_11__core_TestProgressObserver_js__["a"]; });
 
 
-var fs = __webpack_require__(6)
 
 
 
-/**
-  Implements a test where a file is generated
-  and its contents compared with a reference file.
-  @extends Test
-*/
-class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */] {
 
-    /**
-      Callback that implements a specific test case.
-      @callback FileComparisonTestRunFct
-      @return {TestResultOutcome} The outcome of the test.
-    */
 
-    /**
-      Creates a new FileComparisonTest instance.
-      @param {string} name - The name of the test.
-      @param {FileComparisonTestRunFct} runFct - The callback that 
-        will run the test and should generate the file
-        that will be compared to the reference file.
-      @param {TestSequence=} parentSequence - A test
-        sequence to which the new test will be appended.
-    */
-    constructor(name, runFct, parentSequence) {
-        super(name)
-        this.runFct = runFct
-        if (parentSequence) {
-            parentSequence.append(this)
-        }
-    }
 
-    setOutputFilePath(path) {
-        this.outputFilePath = path;
-    }
 
-    setReferenceFilePath(path){
-        this.referenceFilePath = path;
-    }
 
-    doRun(configuration, observer) {
-        let self = this
 
-        let runFctPromise = new Promise(function(resolve, reject) {
-            if (self.runFct) {
-                self.runFct(resolve, reject, self)
-            } else {
-                resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed)
-            }
-        })
 
-        let testPromise = new Promise(function(resolve, reject) {
-            runFctPromise.then(function(outcome) {
-                if (outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed) {
-                    if (self.outputFilePath && self.referenceFilePath) {
-                        let outputContents = fs.readFileSync(self.outputFilePath)
-                        let referenceContents = fs.readFileSync(self.referenceFilePath)
-                        if (outputContents.equals(referenceContents)) {
-                            resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed)
-                        } else {
-                            resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed)
-                        }
-                    } else {
-                        resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError)
-                    }
-                } else {
-                    resolve(outcome)
-                }
-            })
-        })  
 
-        return testPromise;
-    }
 
-}
 
 
 
@@ -838,51 +792,12 @@ class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* T
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(2);
-
-
-
-
-/**
-  Implements a test where the test logic is
-  implemented by a callback that is passed
-  in as argument to the constructor.
-  @extends Test
-*/
-class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */] {
-
-    constructor(name, runFct, parentSequence) {
-        super(name)
-        this.runFct = runFct
-        if (parentSequence) {
-            parentSequence.append(this)
-        }
-    }
-
-    doRun(configuration, observer) {
-        let self = this
-        let testPromise = new Promise(function(resolve, reject) {
-            self.runFct(resolve, reject)
-        })
-        return testPromise
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = FunctionBasedTest;
-
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestHarness; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestConfiguration_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestProgressObserver_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TestSequence_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TestEnvironment_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopTestSequence_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopTestSequence_js__ = __webpack_require__(15);
 
 
 
@@ -891,7 +806,7 @@ class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Te
 
 
 
-let argv = __webpack_require__(13)(process.argv.slice(2));
+let argv = __webpack_require__(16)(process.argv.slice(2));
 
 let topSequence = Symbol()
 
@@ -1016,7 +931,154 @@ class TestHarness {
 
 
 /***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__ = __webpack_require__(13);
+
+
+
+
+/** 
+    Stores the number and name of the
+    test.
+*/
+class TestInformation {
+
+    constructor(name) {
+        this.number = new __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__["a" /* TestNumber */]()
+        this.name = name
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = TestInformation;
+
+
+
+/***/ }),
 /* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+/** Represents the number of a test. */
+class TestNumber {
+
+    constructor() {
+        this.number = [ ]
+    }
+
+    clone() {
+        let newNumber = new TestNumber()
+        for (let i = 0; i < this.number.length; i++) {
+             newNumber.number.push(this.number[i])
+        }
+        return newNumber
+    }
+
+    depth() {
+        return this.number.length
+    }
+
+    part(i) {
+        return this.number[i]
+    }
+
+    deeperNumber() {
+        this.number.push(1)
+        return this
+    }
+
+    increase() {
+        if (this.number.length) {
+            this.number[this.number.length - 1]++
+        }
+        return this
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = TestNumber;
+
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestEnvironment; });
+
+
+/**
+  This class stores context information
+  that can be used by the tests.
+
+  This is somewhat equivalent to global
+  variables for the tests.
+
+  @property {Object} this.testDataDirectories - An 
+     associative array that stores a list of directories
+     where test data is stored. The "(default)" key acts
+     as the default test data directory so you don't have
+     to bother with specifying the key if your test
+     suite doesn't use more than one test data directory.
+     See {@link TestEnvironment#setTestDataDirectory}.
+*/
+class TestEnvironment {
+
+    /** Creates a new TestEnvironment instance. */
+    constructor() {
+        this.testDataDirectories = { }
+    }
+
+    /**
+      Adds or updates a test data directory. If no id
+      is specified then it is considered to be the id
+      of the default test data directory: "(default)".
+
+      @param {string} path - The path of the test
+        data directory.
+      @param {string=} id - The identifier of this
+        test data directory.
+    */
+    setTestDataDirectory(path, id) {
+        if (id == null) {
+            id = "(default)"
+        }
+        this.testDataDirectories[id] = path
+    }
+
+}
+
+
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__ = __webpack_require__(1);
+
+
+
+
+class TopTestSequence extends __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__["a" /* TestSequence */] {
+
+    notify(type, observer) {
+        // Do nothing because the top level sequence is a 
+        // sequence hidden to the user and used by the test 
+        // harness internally only
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = TopTestSequence;
+
+
+
+/***/ }),
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = function (args, opts) {
@@ -1258,149 +1320,41 @@ function isNumber (x) {
 
 
 /***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TestEnvironment; });
-
-
-/**
-  This class stores context information
-  that can be used by the tests.
-
-  This is somewhat equivalent to global
-  variables for the tests.
-
-  @property {Object} this.testDataDirectories - An 
-     associative array that stores a list of directories
-     where test data is stored. The "(default)" key acts
-     as the default test data directory so you don't have
-     to bother with specifying the key if your test
-     suite doesn't use more than one test data directory.
-     See {@link TestEnvironment#setTestDataDirectory}.
-*/
-class TestEnvironment {
-
-    /** Creates a new TestEnvironment instance. */
-    constructor() {
-        this.testDataDirectories = { }
-    }
-
-    /**
-      Adds or updates a test data directory. If no id
-      is specified then it is considered to be the id
-      of the default test data directory: "(default)".
-
-      @param {string} path - The path of the test
-        data directory.
-      @param {string=} id - The identifier of this
-        test data directory.
-    */
-    setTestDataDirectory(path, id) {
-        if (id == null) {
-            id = "(default)"
-        }
-        this.testDataDirectories[id] = path
-    }
-
-}
-
-
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__ = __webpack_require__(16);
-
-
-
-
-/** 
-    Stores the number and name of the
-    test.
-*/
-class TestInformation {
-
-    constructor(name) {
-        this.number = new __WEBPACK_IMPORTED_MODULE_0__TestNumber_js__["a" /* TestNumber */]()
-        this.name = name
-    }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = TestInformation;
-
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-
-/** Represents the number of a test. */
-class TestNumber {
-
-    constructor() {
-        this.number = [ ]
-    }
-
-    clone() {
-        let newNumber = new TestNumber()
-        for (let i = 0; i < this.number.length; i++) {
-             newNumber.number.push(this.number[i])
-        }
-        return newNumber
-    }
-
-    depth() {
-        return this.number.length
-    }
-
-    part(i) {
-        return this.number[i]
-    }
-
-    deeperNumber() {
-        this.number.push(1)
-        return this
-    }
-
-    increase() {
-        if (this.number.length) {
-            this.number[this.number.length - 1]++
-        }
-        return this
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = TestNumber;
-
-
-
-/***/ }),
 /* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(2);
 
 
 
 
-class TopTestSequence extends __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__["a" /* TestSequence */] {
+/**
+  Implements a test where the test logic is
+  implemented by a callback that is passed
+  in as argument to the constructor.
+  @extends Test
+*/
+class FunctionBasedTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */] {
 
-    notify(type, observer) {
-        // Do nothing because the top level sequence is a 
-        // sequence hidden to the user and used by the test 
-        // harness internally only
+    constructor(name, runFct, parentSequence) {
+        super(name)
+        this.runFct = runFct
+        if (parentSequence) {
+            parentSequence.append(this)
+        }
+    }
+
+    doRun(configuration, observer) {
+        let self = this
+        let testPromise = new Promise(function(resolve, reject) {
+            self.runFct(resolve, reject)
+        })
+        return testPromise
     }
 
 }
-/* harmony export (immutable) */ __webpack_exports__["a"] = TopTestSequence;
+/* harmony export (immutable) */ __webpack_exports__["a"] = FunctionBasedTest;
 
 
 
@@ -1409,45 +1363,88 @@ class TopTestSequence extends __WEBPACK_IMPORTED_MODULE_0__TestSequence_js__["a"
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_ObserverEventType_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_TestProgressObserverConfiguration_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_TestOutputConfiguration_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_TestConfiguration_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_TestHarness_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_Test_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_TestResult_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_TestResultOutcome_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_TestSequence_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__core_FunctionBasedTest_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__core_FileComparisonTest_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__core_TestProgressObserver_js__ = __webpack_require__(8);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ObserverEventType", function() { return __WEBPACK_IMPORTED_MODULE_0__core_ObserverEventType_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestHarness", function() { return __WEBPACK_IMPORTED_MODULE_4__core_TestHarness_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_3__core_TestConfiguration_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestOutputConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_2__core_TestOutputConfiguration_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestProgressObserverConfiguration", function() { return __WEBPACK_IMPORTED_MODULE_1__core_TestProgressObserverConfiguration_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Test", function() { return __WEBPACK_IMPORTED_MODULE_5__core_Test_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestResult", function() { return __WEBPACK_IMPORTED_MODULE_6__core_TestResult_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestResultOutcome", function() { return __WEBPACK_IMPORTED_MODULE_7__core_TestResultOutcome_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestSequence", function() { return __WEBPACK_IMPORTED_MODULE_8__core_TestSequence_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FunctionBasedTest", function() { return __WEBPACK_IMPORTED_MODULE_9__core_FunctionBasedTest_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FileComparisonTest", function() { return __WEBPACK_IMPORTED_MODULE_10__core_FileComparisonTest_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TestProgressObserver", function() { return __WEBPACK_IMPORTED_MODULE_11__core_TestProgressObserver_js__["a"]; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FileComparisonTest; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Test_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__ = __webpack_require__(0);
+
+
+var fs = __webpack_require__(6)
 
 
 
+/**
+  Implements a test where a file is generated
+  and its contents compared with a reference file.
+  @extends Test
+*/
+class FileComparisonTest extends __WEBPACK_IMPORTED_MODULE_0__Test_js__["a" /* Test */] {
 
+    /**
+      Callback that implements a specific test case.
+      @callback FileComparisonTestRunFct
+      @return {TestResultOutcome} The outcome of the test.
+    */
 
+    /**
+      Creates a new FileComparisonTest instance.
+      @param {string} name - The name of the test.
+      @param {FileComparisonTestRunFct} runFct - The callback that 
+        will run the test and should generate the file
+        that will be compared to the reference file.
+      @param {TestSequence=} parentSequence - A test
+        sequence to which the new test will be appended.
+    */
+    constructor(name, runFct, parentSequence) {
+        super(name)
+        this.runFct = runFct
+        if (parentSequence) {
+            parentSequence.append(this)
+        }
+    }
 
+    setOutputFilePath(path) {
+        this.outputFilePath = path;
+    }
 
+    setReferenceFilePath(path){
+        this.referenceFilePath = path;
+    }
 
+    doRun(configuration, observer) {
+        let self = this
 
+        let runFctPromise = new Promise(function(resolve, reject) {
+            if (self.runFct) {
+                self.runFct(resolve, reject, self)
+            } else {
+                resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed)
+            }
+        })
 
+        let testPromise = new Promise(function(resolve, reject) {
+            runFctPromise.then(function(outcome) {
+                if (outcome == __WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed) {
+                    if (self.outputFilePath && self.referenceFilePath) {
+                        let outputContents = fs.readFileSync(self.outputFilePath)
+                        let referenceContents = fs.readFileSync(self.referenceFilePath)
+                        if (outputContents.equals(referenceContents)) {
+                            resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].ePassed)
+                        } else {
+                            resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eFailed)
+                        }
+                    } else {
+                        resolve(__WEBPACK_IMPORTED_MODULE_1__TestResultOutcome_js__["a" /* TestResultOutcome */].eExecutionError)
+                    }
+                } else {
+                    resolve(outcome)
+                }
+            })
+        })  
 
+        return testPromise;
+    }
 
-
-
+}
 
 
 
